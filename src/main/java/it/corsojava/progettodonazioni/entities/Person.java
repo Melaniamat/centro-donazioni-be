@@ -1,0 +1,99 @@
+package it.corsojava.progettodonazioni.entities;
+
+import jakarta.persistence.*;
+
+@MappedSuperclass
+public abstract class Person {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column
+    private String name;
+
+    @Column
+    private String surname;
+
+    @Column(unique = true)
+    private String email;
+
+    @Column
+    private String username;
+
+    @Column
+    private String password;
+
+    @Column
+    private String code;
+
+    public Person(String name, String surname, String email, String username, String password) {
+        this.name = surname;
+        this.surname = surname;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+
+    public Person() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setNome(String nome) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public abstract String calculateCode();
+
+}
