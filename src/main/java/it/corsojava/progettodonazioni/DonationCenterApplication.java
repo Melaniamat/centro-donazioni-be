@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DonationCenterApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DonationCenterApplication.class, args);
-	}
+		SpringApplication.run(DonationCenterApplication.class, args);}
 
 }

@@ -32,12 +32,16 @@ public class Donation {
     @Column
     private Status status;
 
-    public Donation(long id, Doctor doctor, DonationCenter donationCenter, LocalDate date, Status status) {
-        this.id = id;
+    public Donation(Doctor doctor, DonationCenter donationCenter, Donor donor, LocalDate date, Status status) {
         this.doctor = doctor;
         this.donationCenter = donationCenter;
+        this.donor = donor;
         this.date = date;
         this.status = status;
+    }
+
+    public Donation(long id, Doctor doctor, DonationCenter donationCenter, Donor donor, LocalDate date, Status status) {
+
     }
 
     public Donation() {
@@ -67,6 +71,14 @@ public class Donation {
         this.donationCenter = donationCenter;
     }
 
+    public Donor getDonor() {
+        return donor;
+    }
+
+    public void setDonor(Donor donor) {
+        this.donor = donor;
+    }
+
     public LocalDate getDate() {
         return date;
     }
@@ -83,11 +95,5 @@ public class Donation {
         this.status = status;
     }
 
-    public Donor getDonor() {
-        return donor;
-    }
 
-    public void setDonor(Donor donor) {
-        this.donor = donor;
-    }
 }
