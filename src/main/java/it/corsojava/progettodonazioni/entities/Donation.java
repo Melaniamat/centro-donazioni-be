@@ -3,6 +3,7 @@ package it.corsojava.progettodonazioni.entities;
 import it.corsojava.progettodonazioni.enumerator.Status;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity

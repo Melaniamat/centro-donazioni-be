@@ -14,11 +14,20 @@ public class EmployeeService {
     EmployeeRepository employeeRepository;
 
     public Employee saveEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+        Employee employeeSaved = employeeRepository.save(employee);
+        employeeSaved.setCode(employee.calculateCode());
+        return updateEmployee(employeeSaved.getId(),employeeSaved);
+    }
+
+    public Employee updateEmployee(long id,Employee employee) {
+        Employee updatedEmployee = employeeRepository.getById(id);
+        updatedEmployee.setName(employee.getName());
+        updatedEmployee.setSurname(employee.getSurname());
+        return employeeRepository.save(updatedEmployee);
     }
 
     public Employee findEmployeeById(long id) {
-        return employeeRepository.getReferenceById(id);
+        return employeeRepository.getById(id);
     }
 
     public void deleteEmployee(Employee employee) {

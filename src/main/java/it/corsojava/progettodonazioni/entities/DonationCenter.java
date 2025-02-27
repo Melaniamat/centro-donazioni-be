@@ -1,12 +1,15 @@
 package it.corsojava.progettodonazioni.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table (name = "donation_centers")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DonationCenter {
 
     @Id

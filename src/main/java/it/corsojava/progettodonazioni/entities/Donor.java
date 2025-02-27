@@ -110,7 +110,7 @@ public class Donor extends Person {
 
     @Override
     public String calculateCode() {
-        return "";
+        return "D-"+getId();
     }
 
 }

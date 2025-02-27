@@ -1,10 +1,12 @@
 package it.corsojava.progettodonazioni.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.corsojava.progettodonazioni.enumerator.Role;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "employees")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee extends Person {
 
     @Enumerated(EnumType.STRING)
@@ -29,7 +31,7 @@ public class Employee extends Person {
 
     @Override
     public String calculateCode() {
-        return "";
+        return "E-"+getId();
     }
 
 }

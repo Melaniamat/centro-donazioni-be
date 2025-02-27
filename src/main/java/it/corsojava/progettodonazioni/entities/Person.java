@@ -28,7 +28,7 @@ public abstract class Person {
     private String code;
 
     public Person(String name, String surname, String email, String username, String password) {
-        this.name = surname;
+        this.name = name;
         this.surname = surname;
         this.email = email;
         this.username = username;
@@ -50,7 +50,7 @@ public abstract class Person {
         return name;
     }
 
-    public void setNome(String nome) {
+    public void setName(String name) {
         this.name = name;
     }
 

@@ -1,11 +1,15 @@
 package it.corsojava.progettodonazioni.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "doctors")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Doctor extends Person {
 
     @Column(name = "phone_number")
@@ -13,7 +17,9 @@ public class Doctor extends Person {
 
     @ManyToOne
     @JoinColumn(name = "donation_center_id")
+    @JsonIgnore
     private DonationCenter donationCenter;
+
 
     @OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER)
     private List<Donation> donations;
@@ -54,7 +60,7 @@ public class Doctor extends Person {
 
     @Override
     public String calculateCode() {
-        return "";
+        return "D-"+this.getId();
     }
 
 }
