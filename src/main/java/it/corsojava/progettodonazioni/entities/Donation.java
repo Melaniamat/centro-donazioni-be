@@ -1,5 +1,7 @@
 package it.corsojava.progettodonazioni.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.corsojava.progettodonazioni.enumerator.Status;
 import jakarta.persistence.*;
 
@@ -8,6 +10,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "donations")
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Donation {
 
     @Id
@@ -41,8 +44,7 @@ public class Donation {
         this.status = status;
     }
 
-    public Donation(long id, Doctor doctor, DonationCenter donationCenter, Donor donor, LocalDate date, Status status) {
-
+    public Donation(long id,Doctor doctor,DonationCenter donationCenter,Donor donor,LocalDate date, Status status) {
     }
 
     public Donation() {

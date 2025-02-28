@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -20,8 +19,8 @@ public class Doctor extends Person {
     @JsonIgnore
     private DonationCenter donationCenter;
 
-
     @OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Donation> donations;
 
     public Doctor(String name,String surname,String email,String username,String password,String phoneNumber,

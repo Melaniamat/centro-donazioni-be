@@ -18,4 +18,9 @@ public class DoctorController {
         return doctorService.saveDoctor(id,doctor);
     }
 
+    @GetMapping("/get/{id}")
+    public Doctor findDoctorById(@PathVariable long id) {
+        return doctorService.findDoctorById(id);
+    }
+
 }

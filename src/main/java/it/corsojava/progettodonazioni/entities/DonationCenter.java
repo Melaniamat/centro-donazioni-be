@@ -1,5 +1,6 @@
 package it.corsojava.progettodonazioni.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -29,6 +30,7 @@ public class DonationCenter {
     private List<Doctor> doctors;
 
     @OneToMany(mappedBy = "donationCenter", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Donation> donations;
 
     public DonationCenter(String name,String adress,String phoneNumber) {

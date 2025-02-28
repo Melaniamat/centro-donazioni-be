@@ -24,4 +24,12 @@ public class DoctorService {
         return doctorRepository.save(doctorSaved);
     }
 
+    public Doctor findDoctorById(long id) {
+        if (doctorRepository.existsById(id)) {
+            return doctorRepository.getById(id);
+        } else {
+            return null;
+        }
+    }
+
 }

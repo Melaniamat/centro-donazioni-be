@@ -1,5 +1,7 @@
 package it.corsojava.progettodonazioni.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.corsojava.progettodonazioni.enumerator.Badge;
 import it.corsojava.progettodonazioni.enumerator.BloodType;
 import jakarta.persistence.*;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "donors")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Donor extends Person {
 
     @Column
@@ -35,10 +38,11 @@ public class Donor extends Person {
     private Badge badge;
 
     @OneToMany(mappedBy = "donor", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Donation> donations;
 
     public Donor(String name,String surname,String email,String username,String password,char sex, LocalDate birthDate,
-                 LocalDate lastDonationDate, boolean idoneity,BloodType bloodType,int donationNumber,Badge badge) {
+                 LocalDate lastDonationDate,boolean idoneity,BloodType bloodType,int donationNumber) {
         super(name, surname, email, username, password);
         this.sex = sex;
         this.birthDate = birthDate;

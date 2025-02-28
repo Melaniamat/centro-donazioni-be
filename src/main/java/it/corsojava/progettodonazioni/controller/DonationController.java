@@ -1,7 +1,44 @@
 package it.corsojava.progettodonazioni.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import it.corsojava.progettodonazioni.entities.Donation;
+import it.corsojava.progettodonazioni.request.DonationSaveRequest;
+import it.corsojava.progettodonazioni.request.DonationUpdateRequest;
+import it.corsojava.progettodonazioni.services.DonationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/api/donation")
 public class DonationController {
+
+    @Autowired
+    DonationService donationService;
+
+    @PostMapping("/save")
+    public Donation saveDonation(@RequestBody DonationSaveRequest request) {
+        return donationService.saveDonation(request);
+    }
+
+    @PutMapping("/update")
+    public Donation updateDonation(@RequestBody DonationUpdateRequest request) {
+        return donationService.updateDonation(request);
+    }
+
+    @GetMapping("/getByIdDoctor/{id}")
+    public List<Donation> findAllByIdDoctor(@PathVariable long id) {
+        return donationService.findAllByIdDoctor(id);
+    }
+
+    @GetMapping("/getByIdDonor/{id}")
+    public List<Donation> findAllByIdDonor(@PathVariable long id) {
+        return donationService.findAllByIdDonor(id);
+    }
+
+    @GetMapping("/getByIdDonationCenter/{id}")
+    public List<Donation> findAllByIdDonationCenter(@PathVariable long id) {
+        return donationService.findAllByIdDonationCenter(id);
+    }
+
 }
