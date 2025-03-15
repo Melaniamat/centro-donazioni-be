@@ -22,4 +22,14 @@ public class DonationCenterController {
         return donationCenterService.findDonationCenterById(id);
     }
 
+    @PutMapping("/update/{id}")
+    public DonationCenter updateDonationCenter(@PathVariable long id,@RequestBody DonationCenter donationCenter) {
+        return donationCenterService.updateDonationCenter(id,donationCenter);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteDonationCenter(@PathVariable long id) {
+        donationCenterService.deleteDonationCenter(donationCenterService.findDonationCenterById(id));
+    }
+
 }
