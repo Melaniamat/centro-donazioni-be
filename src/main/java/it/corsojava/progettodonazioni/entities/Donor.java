@@ -50,7 +50,6 @@ public class Donor extends Person {
         this.idoneity = idoneity;
         this.bloodType = bloodType;
         this.donationNumber = donationNumber;
-        this.badge = badge;
     }
 
     public Donor() {
@@ -112,9 +111,19 @@ public class Donor extends Person {
         this.badge = badge;
     }
 
+    public Badge calculateBadge() {
+        if (getDonationNumber() < 10) {
+            return Badge.BRONZE;
+        } else if (getDonationNumber() < 20) {
+            return Badge.SILVER;
+        } else {
+            return Badge.GOLD;
+        }
+    }
+
     @Override
     public String calculateCode() {
-        return "D-"+getId();
+        return getSurname()+getId();
     }
 
 }

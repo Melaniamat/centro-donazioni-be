@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface DonationRepository extends JpaRepository<Donation,Long> {
 
-    public List<Donation> findByDoctorId(long doctorId);
-    public List<Donation> findByDonorId(long donorId);
-    public List<Donation> findByDonationCenterId(long centerId);
+    List<Donation> findByDoctorId(long doctorId);
+    List<Donation> findByDonorId(long donorId);
+    List<Donation> findByDonationCenterId(long centerId);
 
 }

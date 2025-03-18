@@ -1,7 +1,6 @@
 package it.corsojava.progettodonazioni.controller;
 
 import it.corsojava.progettodonazioni.entities.Doctor;
-import it.corsojava.progettodonazioni.repositories.DoctorRepository;
 import it.corsojava.progettodonazioni.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +20,16 @@ public class DoctorController {
     @GetMapping("/get/{id}")
     public Doctor findDoctorById(@PathVariable long id) {
         return doctorService.findDoctorById(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public Doctor updateDoctor(@PathVariable long id, @RequestBody Doctor doctor) {
+        return doctorService.updateDoctor(id,doctor);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteDoctor(@PathVariable long id) {
+        doctorService.deleteDoctor(id);
     }
 
 }

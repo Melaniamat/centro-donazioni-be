@@ -13,13 +13,23 @@ public class DonationCenterController {
     DonationCenterService donationCenterService;
 
     @PostMapping("/save")
-    public DonationCenter saveDonationCenter(@RequestBody DonationCenter donationCenter) {
+    public DonationCenter saveCenter(@RequestBody DonationCenter donationCenter) {
         return donationCenterService.saveDonationCenter(donationCenter);
     }
 
     @GetMapping("/getById/{id}")
-    public DonationCenter findById(@PathVariable long id) {
+    public DonationCenter findCenterById(@PathVariable long id) {
         return donationCenterService.findDonationCenterById(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public DonationCenter updateCenter(@PathVariable long id, @RequestBody DonationCenter donationCenter) {
+        return donationCenterService.updateDonationCenter(id,donationCenter);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteCenter(@PathVariable long id) {
+        donationCenterService.deleteDonationCenter(id);
     }
 
 }
