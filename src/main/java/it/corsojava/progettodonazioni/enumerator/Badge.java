@@ -1,8 +1,14 @@
 package it.corsojava.progettodonazioni.enumerator;
 
 public enum Badge {
-
-    BRONZE,
+    ND,
+    COPPER,
     SILVER,
-    GOLD
+    GOLD,
+    PLATINUM,
+    RUBY,
+    EMERALD,
+    DIAMOND,
+
+
 }

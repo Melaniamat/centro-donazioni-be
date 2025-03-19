@@ -34,9 +34,9 @@ public class DonorController {
         return donorService.updateDonor(id,donor);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteDonor(@RequestBody Donor donor) {
-        donorService.deleteDonor(donor);
+    @DeleteMapping("/delete/{id}")
+    public void deleteDonor(@PathVariable long id) {
+        donorService.deleteDonor(id);
     }
 
 }

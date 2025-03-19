@@ -29,7 +29,7 @@ public class Receiver extends Person {
 
     @Override
     public String calculateCode() {
-        return "";
+        return getSurname()+getId();
     }
 
 }

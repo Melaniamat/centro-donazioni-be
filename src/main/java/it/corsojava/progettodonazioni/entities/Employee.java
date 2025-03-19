@@ -31,7 +31,7 @@ public class Employee extends Person {
 
     @Override
     public String calculateCode() {
-        return this.getUsername()+this.getId();
+        return getSurname()+getId();
     }
 
 }

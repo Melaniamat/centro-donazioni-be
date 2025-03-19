@@ -3,7 +3,9 @@ package it.corsojava.progettodonazioni.services;
 import it.corsojava.progettodonazioni.entities.Donation;
 import it.corsojava.progettodonazioni.entities.Donor;
 import it.corsojava.progettodonazioni.entities.Employee;
-import it.corsojava.progettodonazioni.enumerator.*;
+import it.corsojava.progettodonazioni.enumerator.Badge;
+import it.corsojava.progettodonazioni.enumerator.Role;
+import it.corsojava.progettodonazioni.enumerator.Status;
 import it.corsojava.progettodonazioni.repositories.*;
 import it.corsojava.progettodonazioni.request.DonationSaveRequest;
 import it.corsojava.progettodonazioni.request.DonationUpdateRequest;
@@ -34,38 +36,45 @@ public class DonationService {
 
     public Donation saveDonation(DonationSaveRequest request) {
         Donation donation = new Donation();
+        donation.setStatus(Status.SCHEDULED);
         donation.setDate(LocalDate.now());
         Donor donor = donorService.findDonorById(request.getDonorId());
-        if ((donor.getSex()=='M' && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
-                (donor.getSex()=='F' && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
+        if ((donor.getSex().equals('F') && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
+                (donor.getSex().equals('F') && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
             donation.setStatus(Status.REFUSED);
-            return donationRepository.save(donation);
         } else {
-            donation.setStatus(Status.SCHEDULED);
             donation.setDonor(donorService.findDonorById(request.getDonorId()));
             donation.setDoctor(doctorService.findDoctorById(request.getDoctorId()));
             donation.setDonationCenter(donationCenterService.findDonationCenterById(request.getCenterId()));
-            return donationRepository.save(donation);
+        }
+        return donationRepository.save(donation);
+    }
+
+    public Donation findDonationById(long id) {
+        if (donationRepository.existsById(id)) {
+            return donationRepository.getById(id);
+        } else {
+            return null;
         }
     }
 
     public Donation updateDonation(DonationUpdateRequest request) {
         Employee employee = employeeService.findEmployeeById(request.getEmployeeId());
         Donation donation = donationRepository.getById(request.getDonationId());
-        if (employee.getRole().equals(Role.BASE)) {
+        if (employee.getRole().equals(Role.BASE) || donation.getStatus().equals(Status.REFUSED)) {
             return donation;
         } else {
             donation.setStatus(Status.COMPLETED);
             Donor donor = donation.getDonor();
-            donor.setDonationNumber(donor.getDonationNumber()+1);
-            if (donor.getDonationNumber() == 10) {
-                donor.setBadge(Badge.SILVER);
-            } else if (donor.getDonationNumber() == 20) {
-                donor.setBadge(Badge.GOLD);
-            }
+            donor.setNumberOfDonations(donor.getNumberOfDonations()+1);
+            donor.setBadge(donor.calculateBadge());
             donorService.saveDonor(donor);
             return donationRepository.save(donation);
         }
+    }
+
+    public void deleteDonation(long id) {
+        donationRepository.deleteById(id);
     }
 
     public List<Donation> findAllByIdDoctor(long id) {

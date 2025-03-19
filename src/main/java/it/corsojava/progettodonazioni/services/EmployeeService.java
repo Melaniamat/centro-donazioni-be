@@ -30,8 +30,8 @@ public class EmployeeService {
         return employeeRepository.getById(id);
     }
 
-    public void deleteEmployee(Employee employee) {
-        employeeRepository.delete(employee);
+    public void deleteEmployee(long id) {
+        employeeRepository.deleteById(id);
     }
 
     public List<Employee> findAllEmployees() {

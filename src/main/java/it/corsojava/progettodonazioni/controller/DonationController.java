@@ -21,9 +21,9 @@ public class DonationController {
         return donationService.saveDonation(request);
     }
 
-    @PutMapping("/update")
-    public Donation updateDonation(@RequestBody DonationUpdateRequest request) {
-        return donationService.updateDonation(request);
+    @GetMapping("getById/{id}")
+    public Donation findDonationById(@PathVariable long id) {
+        return donationService.findDonationById(id);
     }
 
     @GetMapping("/getByIdDoctor/{id}")
@@ -39,6 +39,16 @@ public class DonationController {
     @GetMapping("/getByIdDonationCenter/{id}")
     public List<Donation> findAllByIdDonationCenter(@PathVariable long id) {
         return donationService.findAllByIdDonationCenter(id);
+    }
+
+    @PutMapping("/update")
+    public Donation updateDonation(@RequestBody DonationUpdateRequest request) {
+        return donationService.updateDonation(request);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteDonation(@PathVariable long id) {
+        donationService.deleteDonation(id);
     }
 
 }
