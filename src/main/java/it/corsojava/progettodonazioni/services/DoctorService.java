@@ -26,7 +26,7 @@ public class DoctorService {
 
     public Doctor findDoctorById(long id) {
         if (doctorRepository.existsById(id)) {
-            return doctorRepository.getReferenceById(id);
+            return doctorRepository.getById(id);
         } else {
             return null;
         }
