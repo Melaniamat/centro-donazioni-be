@@ -39,8 +39,8 @@ public class DonationService {
         donation.setStatus(Status.SCHEDULED);
         donation.setDate(LocalDate.now());
         Donor donor = donorService.findDonorById(request.getDonorId());
-        if ((donor.getSex()=='M' && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
-                (donor.getSex()=='F' && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
+        if ((donor.getSex().equals('F') && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
+                (donor.getSex().equals('F') && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
             donation.setStatus(Status.REFUSED);
         } else {
             donation.setDonor(donorService.findDonorById(request.getDonorId()));
@@ -66,7 +66,7 @@ public class DonationService {
         } else {
             donation.setStatus(Status.COMPLETED);
             Donor donor = donation.getDonor();
-            donor.setDonationNumber(donor.getDonationNumber()+1);
+            donor.setNumberOfDonations(donor.getNumberOfDonations()+1);
             donor.setBadge(donor.calculateBadge());
             donorService.saveDonor(donor);
             return donationRepository.save(donation);
