@@ -6,7 +6,7 @@ public class DonationSaveRequest {
     private long donorId;
     private long centerId;
 
-    public DonationSaveRequest(long doctorId,long donorId,long centerId) {
+    public DonationSaveRequest(long doctorId, long donorId, long centerId) {
         this.doctorId = doctorId;
         this.donorId = donorId;
         this.centerId = centerId;
