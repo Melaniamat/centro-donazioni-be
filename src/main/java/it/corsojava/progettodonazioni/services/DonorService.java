@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -18,14 +19,20 @@ public class DonorService {
     DonorRepository donorRepository;
 
     public Donor saveDonor(Donor donor) {
-        if (ChronoUnit.YEARS.between(donor.getBirthDate(), LocalDate.now())<18) {
-            return null;
-        } else {
-            Donor donorSaved = donorRepository.save(donor);
-            donorSaved.setCode(donorSaved.calculateCode());
-            donorSaved.setBadge(donorSaved.calculateBadge());
-            return donorRepository.save(donorSaved);
+        int age = Period.between(donor.getBirthDate(), LocalDate.now()).getYears();
+        try {
+            if (age>=18 && age<=60) {
+                Donor donorSaved = donorRepository.save(donor);
+                donorSaved.setCode(donorSaved.calculateCode());
+                donorSaved.setBadge(donorSaved.calculateBadge());
+                return donorRepository.save(donorSaved);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
+            e.getMessage();
         }
+        return donor;
     }
 
     public Donor findDonorById(long id) {
