@@ -32,4 +32,15 @@ public class DoctorService {
         }
     }
 
+    public Doctor updateDoctor(long id, Doctor doctor) {
+        if (doctorRepository.existsById(id)) {
+            Doctor doctorUpdated = doctorRepository.getById(id);
+            doctorUpdated.setName(doctor.getName());
+            doctorUpdated.setSurname(doctor.getSurname());
+            return doctorRepository.save(doctorUpdated);
+        } else {
+            return null;
+        }
+    }
+
 }
