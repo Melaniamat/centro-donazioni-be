@@ -33,14 +33,21 @@ public class DoctorService {
     }
 
     public Doctor updateDoctor(long id, Doctor doctor) {
-        if (doctorRepository.existsById(id)) {
-            Doctor doctorUpdated = doctorRepository.getById(id);
-            doctorUpdated.setName(doctor.getName());
-            doctorUpdated.setSurname(doctor.getSurname());
-            return doctorRepository.save(doctorUpdated);
-        } else {
-            return null;
+        Doctor doctorToUpdate = doctorRepository.getById(id);
+        if (null != doctor.getEmail()) {
+            doctorToUpdate.setEmail(doctor.getEmail());
         }
+        if (null != doctor.getPhoneNumber()) {
+            doctorToUpdate.setPhoneNumber(doctor.getPhoneNumber());
+        }
+        if (null != doctor.getUsername()) {
+            doctorToUpdate.setUsername(doctor.getUsername());
+        }
+        return doctorRepository.save(doctorToUpdate);
+    }
+
+    public void deleteDoctor(long id) {
+        doctorRepository.deleteById(id);
     }
 
 }

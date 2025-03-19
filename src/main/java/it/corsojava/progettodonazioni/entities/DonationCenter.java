@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -21,7 +19,7 @@ public class DonationCenter {
     private String name;
 
     @Column
-    private String adress;
+    private String address;
 
     @Column
     private String phoneNumber;
@@ -33,9 +31,9 @@ public class DonationCenter {
     @JsonIgnore
     private List<Donation> donations;
 
-    public DonationCenter(String name,String adress,String phoneNumber) {
+    public DonationCenter(String name,String address,String phoneNumber) {
         this.name = name;
-        this.adress = adress;
+        this.address = address;
         this.phoneNumber = phoneNumber;
     }
 
@@ -58,12 +56,12 @@ public class DonationCenter {
         this.name = name;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {

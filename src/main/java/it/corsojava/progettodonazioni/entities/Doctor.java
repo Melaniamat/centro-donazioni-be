@@ -23,11 +23,9 @@ public class Doctor extends Person {
     @JsonIgnore
     private List<Donation> donations;
 
-    public Doctor(String name,String surname,String email,String username,String password,String phoneNumber,
-                  DonationCenter donationCenter) {
+    public Doctor(String name,String surname,String email,String username,String password,String phoneNumber) {
         super(name, surname, email, username, password);
         this.phoneNumber = phoneNumber;
-        this.donationCenter = donationCenter;
     }
 
     public Doctor() {
@@ -59,7 +57,7 @@ public class Doctor extends Person {
 
     @Override
     public String calculateCode() {
-        return "D-"+this.getId();
+        return getSurname()+getId();
     }
 
 }

@@ -1,5 +1,6 @@
 package it.corsojava.progettodonazioni.services;
 
+import it.corsojava.progettodonazioni.entities.Doctor;
 import it.corsojava.progettodonazioni.entities.Donor;
 import it.corsojava.progettodonazioni.repositories.DonorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,33 +17,25 @@ public class DonorService {
     DonorRepository donorRepository;
 
     public Donor saveDonor(Donor donor) {
-        Donor donorSaved = donorRepository.save(donor);
-        donorSaved.setCode(donorSaved.calculateCode());
-        if (donor.isIdoneity() || ChronoUnit.YEARS.between(donor.getBirthDate(),LocalDate.now())>=18) {
-            return donorRepository.save(donorSaved);
-        } else {
-            donorRepository.delete(donorSaved);
+        if (ChronoUnit.YEARS.between(donor.getBirthDate(), LocalDate.now())<18) {
             return null;
+        } else {
+            Donor donorSaved = donorRepository.save(donor);
+            donorSaved.setCode(donorSaved.calculateCode());
+            donorSaved.setBadge(donorSaved.calculateBadge());
+            return donorRepository.save(donorSaved);
         }
     }
 
     public Donor findDonorById(long id) {
-        if (donorRepository.existsById(id)) {
-            return donorRepository.getById(id);
-        } else {
-            return null;
-        }
+        return donorRepository.getById(id);
     }
 
     public Donor updateDonor(long id, Donor donor) {
-        if (donorRepository.existsById(id)) {
-            Donor donorUpdated = donorRepository.getById(id);
-            donorUpdated.setName(donor.getName());
-            donorUpdated.setSurname(donor.getSurname());
-            return donorRepository.save(donorUpdated);
-        } else {
-            return null;
-        }
+        Donor donorUpdated = donorRepository.getById(id);
+        donorUpdated.setName(donor.getName());
+        donorUpdated.setSurname(donor.getSurname());
+        return donorRepository.save(donorUpdated);
     }
 
     public void deleteDonor(Donor donor) {
