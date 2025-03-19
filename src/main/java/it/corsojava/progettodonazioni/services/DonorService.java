@@ -2,6 +2,7 @@ package it.corsojava.progettodonazioni.services;
 
 import it.corsojava.progettodonazioni.entities.Doctor;
 import it.corsojava.progettodonazioni.entities.Donor;
+import it.corsojava.progettodonazioni.enumerator.Status;
 import it.corsojava.progettodonazioni.repositories.DonorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,9 @@ public class DonorService {
         return donorRepository.save(donorUpdated);
     }
 
-    public void deleteDonor(Donor donor) {
-        donorRepository.delete(donor);
+    public void deleteDonor(long id) {
+        findDonorById(id);
+        donorRepository.deleteById(id);
     }
 
     public List<Donor> findAllDonors() {
