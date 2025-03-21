@@ -24,9 +24,9 @@ public class EmployeeController {
         return employeeService.findEmployeeById(id);
     }
 
-    @GetMapping("/getAll")
-    public List<Employee> getAllEmployees() {
-        return employeeService.findAllEmployees();
+    @GetMapping("/getAllAlphabetical")
+    public List<Employee> getEmployees() {
+        return employeeService.findEmployeesAlphabetical();
     }
 
     @PutMapping("/update/{id}")

@@ -5,6 +5,8 @@ import it.corsojava.progettodonazioni.services.DonationCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/donationcenter")
 public class DonationCenterController {
@@ -30,6 +32,11 @@ public class DonationCenterController {
     @DeleteMapping("/delete/{id}")
     public void deleteCenter(@PathVariable long id) {
         donationCenterService.deleteDonationCenter(id);
+    }
+
+    @GetMapping("/getAllAlphabetical")
+    public List<DonationCenter> findDonationCenters() {
+        return donationCenterService.findCentersAlphabetical();
     }
 
 }

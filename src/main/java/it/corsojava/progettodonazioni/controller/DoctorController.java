@@ -5,6 +5,8 @@ import it.corsojava.progettodonazioni.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/doctor")
 public class DoctorController {
@@ -30,6 +32,11 @@ public class DoctorController {
     @DeleteMapping("/delete/{id}")
     public void deleteDoctor(@PathVariable long id) {
         doctorService.deleteDoctor(id);
+    }
+
+    @GetMapping("/getAllAlphabetical")
+    public List<Doctor> getDoctors() {
+        return doctorService.getDoctorsAlphabetical();
     }
 
 }

@@ -24,9 +24,9 @@ public class DonorController {
         return donorService.findDonorById(id);
     }
 
-    @GetMapping("/getAll")
-    public List<Donor> getAllDonors() {
-        return donorService.findAllDonors();
+    @GetMapping("/getAllAlphabetical")
+    public List<Donor> finnDonors() {
+        return donorService.findDonorsAlphabetical();
     }
 
     @PutMapping("/update/{id}")
@@ -38,5 +38,7 @@ public class DonorController {
     public void deleteDonor(@PathVariable long id) {
         donorService.deleteDonor(id);
     }
+
+
 
 }

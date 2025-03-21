@@ -5,6 +5,9 @@ import it.corsojava.progettodonazioni.repositories.DonationCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
+
 @Service
 public class DonationCenterService {
 
@@ -39,7 +42,13 @@ public class DonationCenterService {
     }
 
     public void deleteDonationCenter(long id) {
-        donationCenterRepository.deleteById(id);
+        DonationCenter donationCenterToDelete = donationCenterRepository.getById(id);
+        donationCenterRepository.delete(donationCenterToDelete);
     }
 
+    public List<DonationCenter> findCentersAlphabetical() {
+        List<DonationCenter> donationCenters = donationCenterRepository.findAll();
+        donationCenters.sort(Comparator.comparing(DonationCenter :: getName));
+        return donationCenters;
+    }
 }
