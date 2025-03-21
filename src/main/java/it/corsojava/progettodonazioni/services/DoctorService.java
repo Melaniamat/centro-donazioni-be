@@ -18,8 +18,6 @@ public class DoctorService {
     @Autowired
     DonationCenterRepository donationCenterRepository;
 
-    @Autowired
-    DonationService donationService;
 
 
 
