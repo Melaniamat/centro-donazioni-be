@@ -27,6 +27,11 @@ public class DonationController {
         return donationService.findDonationById(id);
     }
 
+    @GetMapping("getAllByDate")
+    public List<Donation> findDonations() {
+        return donationService.findAllByDate();
+    }
+
     @GetMapping("/getByIdDoctor/{id}")
     public List<Donation> findAllByIdDoctor(@PathVariable long id) {
         return donationService.findAllByIdDoctor(id);

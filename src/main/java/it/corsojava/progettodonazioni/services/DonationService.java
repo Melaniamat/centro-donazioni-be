@@ -1,5 +1,9 @@
 package it.corsojava.progettodonazioni.services;
 
+import it.corsojava.progettodonazioni.entities.*;
+import it.corsojava.progettodonazioni.enumerator.Badge;
+import it.corsojava.progettodonazioni.enumerator.Role;
+import it.corsojava.progettodonazioni.enumerator.Status;
 import it.corsojava.progettodonazioni.entities.Donation;
 import it.corsojava.progettodonazioni.entities.Donor;
 import it.corsojava.progettodonazioni.entities.Employee;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +47,8 @@ public class DonationService {
         donation.setStatus(Status.SCHEDULED);
         donation.setDate(LocalDate.now());
         Donor donor = donorService.findDonorById(request.getDonorId());
-        if ((donor.getSex().equals('F') && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
-                (donor.getSex().equals('F') && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
+        if ((donor.getSex().equals("M") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
+                (donor.getSex().equals("F") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
             donation.setStatus(Status.REFUSED);
             return donationRepository.save(donation);
         } else {
@@ -115,6 +120,12 @@ public class DonationService {
 
     public void deleteDonation(long id) {
         donationRepository.deleteById(id);
+    }
+
+    public List<Donation> findAllByDate() {
+        List<Donation> donations = donationRepository.findAll();
+        donations.sort(Comparator.comparing(Donation :: getDate));
+        return donations;
     }
 
     public List<Donation> findAllByIdDoctor(long id) {

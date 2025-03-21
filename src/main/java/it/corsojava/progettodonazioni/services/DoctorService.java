@@ -7,7 +7,8 @@ import it.corsojava.progettodonazioni.repositories.DonationCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.sound.midi.Receiver;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class DoctorService {
@@ -17,9 +18,6 @@ public class DoctorService {
 
     @Autowired
     DonationCenterRepository donationCenterRepository;
-
-
-
 
     public Doctor saveDoctor(long id, Doctor doctor) {
         DonationCenter donationCenter = donationCenterRepository.getById(id);
@@ -52,7 +50,14 @@ public class DoctorService {
     }
 
     public void deleteDoctor(long id) {
-        doctorRepository.deleteById(id);
+        Doctor doctorToDelete = doctorRepository.getById(id);
+        doctorRepository.delete(doctorToDelete);
+    }
+
+    public List<Doctor> getDoctorsAlphabetical() {
+        List<Doctor> doctors = doctorRepository.findAll();
+        doctors.sort(Comparator.comparing(Doctor::getSurname));
+        return doctors;
     }
 
     public void assignDonation(long id){

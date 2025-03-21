@@ -5,6 +5,7 @@ import it.corsojava.progettodonazioni.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -20,22 +21,36 @@ public class EmployeeService {
     }
 
     public Employee updateEmployee(long id,Employee employee) {
-        Employee updatedEmployee = employeeRepository.getById(id);
-        updatedEmployee.setName(employee.getName());
-        updatedEmployee.setSurname(employee.getSurname());
-        return employeeRepository.save(updatedEmployee);
+        if (employeeRepository.existsById(id)) {
+            Employee updatedEmployee = employeeRepository.getById(id);
+            if (employee.getEmail() != null) {
+                updatedEmployee.setEmail(employee.getEmail());
+            }
+            if (employee.getEmail() != null) {
+                updatedEmployee.setUsername(employee.getUsername());
+            }
+            return employeeRepository.save(updatedEmployee);
+        } else {
+            return null;
+        }
     }
 
     public Employee findEmployeeById(long id) {
-        return employeeRepository.getById(id);
+        if (employeeRepository.existsById(id)) {
+            return employeeRepository.getById(id);
+        } else {
+            return null;
+        }
     }
 
     public void deleteEmployee(long id) {
         employeeRepository.deleteById(id);
     }
 
-    public List<Employee> findAllEmployees() {
-        return employeeRepository.findAll();
+    public List<Employee> findEmployeesAlphabetical() {
+        List<Employee> employees = employeeRepository.findAll();
+        employees.sort(Comparator.comparing(Employee :: getSurname));
+        return employees;
     }
 
 }

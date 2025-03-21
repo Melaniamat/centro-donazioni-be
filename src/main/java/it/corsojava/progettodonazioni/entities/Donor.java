@@ -9,18 +9,22 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+
 @Entity
 @Table
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
 public class Donor extends Person {
+
     @Column
     private String sex;
+
     @Enumerated(EnumType.STRING)
     @Column
     private BloodType bloodType;
+
     @Column
     private LocalDate birthdate;
+
     @Column
     private String address;
     @Column
@@ -29,8 +33,10 @@ public class Donor extends Person {
     private String location;
     @Column
     private LocalDate lastDonationDate;
+
     @Column
     private boolean abilitated;
+
     @Column
     private int numberOfDonations;
 
@@ -199,28 +205,28 @@ public class Donor extends Person {
     }
 
     public Badge calculateBadge() {
-        if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 3 && this.numberOfDonations >= 6
-                || this.numberOfDonations >= 8) {
-            this.setBadge(Badge.COPPER);
-        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 5 && this.numberOfDonations >= 12
-                || this.numberOfDonations >= 16) {
-            this.setBadge(Badge.SILVER);
-        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 10 && this.numberOfDonations >= 24
-                || this.numberOfDonations >= 36) {
-            this.setBadge(Badge.GOLD);
-        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 20 && this.numberOfDonations >= 40
-                || this.numberOfDonations >= 50) {
-            this.setBadge(Badge.PLATINUM);
-        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 30 && this.numberOfDonations >= 60
-                || this.numberOfDonations >= 75) {
-            this.setBadge(Badge.RUBY);
+        if (Period.between(this.birthdate, LocalDate.now()).getYears() > 60 && this.numberOfDonations >= 120) {
+            this.setBadge(Badge.DIAMOND);
+            this.setAbilitated(false);
         } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 40 && this.numberOfDonations >= 80
                 || this.numberOfDonations >= 100) {
             this.setBadge(Badge.EMERALD);
-        } else if (Period.between(this.birthdate, LocalDate.now()).getYears() > 60 && this.numberOfDonations >= 120) {
-            this.setBadge(Badge.DIAMOND);
-            this.setAbilitated(false);
-        }else {
+        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 30 && this.numberOfDonations >= 60
+                || this.numberOfDonations >= 75) {
+            this.setBadge(Badge.RUBY);
+        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 20 && this.numberOfDonations >= 40
+                || this.numberOfDonations >= 50) {
+            this.setBadge(Badge.PLATINUM);
+        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 10 && this.numberOfDonations >= 24
+                || this.numberOfDonations >= 36) {
+            this.setBadge(Badge.GOLD);
+        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 5 && this.numberOfDonations >= 12
+                || this.numberOfDonations >= 16) {
+            this.setBadge(Badge.SILVER);
+        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 3 && this.numberOfDonations >= 6
+                || this.numberOfDonations >= 8) {
+            this.setBadge(Badge.COPPER);
+        } else {
             this.setBadge(Badge.ND);
         }
         return badge;
