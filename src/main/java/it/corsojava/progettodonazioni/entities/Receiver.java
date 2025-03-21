@@ -1,7 +1,12 @@
 package it.corsojava.progettodonazioni.entities;
 
 import it.corsojava.progettodonazioni.enumerator.BloodType;
+import it.corsojava.progettodonazioni.enumerator.RH;
+import it.corsojava.progettodonazioni.enumerator.Status;
 import jakarta.persistence.*;
+
+import static it.corsojava.progettodonazioni.costants.Costant.NOT_AUTHORIZED;
+import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Entity
 @Table(name = "receivers")
@@ -11,9 +16,28 @@ public class Receiver extends Person {
     @Column(name = "blood_type")
     private BloodType bloodType;
 
-    public Receiver(String name, String surname, String email, String username, String password, BloodType bloodType) {
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "RH")
+    private RH rh;
+
+    @Column
+     private String location;
+    @Column
+    private String address;
+    @Column
+    private String CAP;
+
+
+
+    public Receiver(String name, String surname, String email, String username, String password, BloodType bloodType,RH rh, String location, String address,String CAP) {
         super(name, surname, email, username, password);
         this.bloodType = bloodType;
+        this.rh=rh;
+        this.location=location;
+        this.address=address;
+        this.CAP=CAP;
+        this.location=location;
     }
 
     public Receiver() {
@@ -27,9 +51,50 @@ public class Receiver extends Person {
         this.bloodType = bloodType;
     }
 
+    public RH getRh() {
+        return rh;
+    }
+
+    public void setRh(RH rh) {
+        this.rh = rh;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCAP() {
+        return CAP;
+    }
+
+    public void setCAP(String CAP) {
+        this.CAP = CAP;
+    }
+
     @Override
     public String calculateCode() {
         return getSurname()+getId();
     }
 
+
+    public void receiveDonation(Donation donation) {
+
+
+    }
+
 }
+
+
+

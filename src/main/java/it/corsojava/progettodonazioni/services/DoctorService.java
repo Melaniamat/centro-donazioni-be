@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.sound.midi.Receiver;
+
 @Service
 public class DoctorService {
 
@@ -18,6 +20,11 @@ public class DoctorService {
 
     @Autowired
     DonationCenterRepository donationCenterRepository;
+
+    @Autowired
+    DonationService donationService;
+
+
 
     public Doctor saveDoctor(long id, Doctor doctor) {
         DonationCenter donationCenter = donationCenterRepository.getById(id);
@@ -58,6 +65,11 @@ public class DoctorService {
         List<Doctor> doctors = doctorRepository.findAll();
         doctors.sort(Comparator.comparing(Doctor::getSurname));
         return doctors;
+    }
+
+    public void assignDonation(long id){
+
+
     }
 
 }

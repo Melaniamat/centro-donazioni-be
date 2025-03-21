@@ -4,6 +4,11 @@ import it.corsojava.progettodonazioni.entities.*;
 import it.corsojava.progettodonazioni.enumerator.Badge;
 import it.corsojava.progettodonazioni.enumerator.Role;
 import it.corsojava.progettodonazioni.enumerator.Status;
+import it.corsojava.progettodonazioni.entities.Donation;
+import it.corsojava.progettodonazioni.entities.Donor;
+import it.corsojava.progettodonazioni.entities.Employee;
+import it.corsojava.progettodonazioni.entities.Receiver;
+import it.corsojava.progettodonazioni.enumerator.*;
 import it.corsojava.progettodonazioni.repositories.*;
 import it.corsojava.progettodonazioni.request.DonationSaveRequest;
 import it.corsojava.progettodonazioni.request.DonationUpdateRequest;
@@ -13,7 +18,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
+
+import static it.corsojava.progettodonazioni.costants.Costant.NOT_AUTHORIZED;
+import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
 public class DonationService {
@@ -58,6 +67,42 @@ public class DonationService {
         }
     }
 
+    public List<Donation> getdonationBycompatible (Receiver receiver){
+        RH recRh= receiver.getRh();
+        BloodType recBloodType= receiver.getBloodType();
+        List<Donation> allDonations=donationRepository.findAll();
+        List<Donation>newList=new ArrayList<>();
+            for (Donation donation:allDonations) {
+                BloodType donBloodType = donation.getDonor().getBloodType();
+                RH donRh = donation.getDonor().getRh();
+                if (donation.isAvailability() && donation.getStatus().equals(Status.COMPLETED)) {
+                    if (recBloodType == donBloodType && recRh == donRh || recBloodType == donBloodType && donRh == RH.NEGATIVE) {
+                        newList.add(donation);
+                    } else if (recBloodType == BloodType.AB && recRh == RH.POSITIVE ||
+                            donBloodType == BloodType.O && donRh == RH.NEGATIVE) {
+                        newList.add(donation);
+                    } else if (recBloodType == BloodType.AB && donRh == RH.NEGATIVE ||
+                            donBloodType == BloodType.O && recRh == RH.POSITIVE) {
+                        if (recRh == donRh) {
+                            newList.add(donation);
+                        }
+                    } return newList;
+                } else {
+                    System.out.println(NOT_AUTHORIZED);
+                }
+            } return newList;
+
+            }
+
+
+
+
+
+
+
+
+
+
     public Donation updateDonation(DonationUpdateRequest request) {
         Employee employee = employeeService.findEmployeeById(request.getEmployeeId());
         Donation donation = donationRepository.getById(request.getDonationId());
@@ -75,12 +120,6 @@ public class DonationService {
 
     public void deleteDonation(long id) {
         donationRepository.deleteById(id);
-    }
-
-    public List<Donation> findAllByDate() {
-        List<Donation> donations = donationRepository.findAll();
-        donations.sort(Comparator.comparing(Donation :: getDate));
-        return donations;
     }
 
     public List<Donation> findAllByIdDoctor(long id) {
