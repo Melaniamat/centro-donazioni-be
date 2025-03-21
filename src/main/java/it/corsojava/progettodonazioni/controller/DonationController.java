@@ -1,6 +1,7 @@
 package it.corsojava.progettodonazioni.controller;
 
 import it.corsojava.progettodonazioni.entities.Donation;
+import it.corsojava.progettodonazioni.entities.Receiver;
 import it.corsojava.progettodonazioni.request.DonationSaveRequest;
 import it.corsojava.progettodonazioni.request.DonationUpdateRequest;
 import it.corsojava.progettodonazioni.services.DonationService;
@@ -49,6 +50,11 @@ public class DonationController {
     @DeleteMapping("/delete/{id}")
     public void deleteDonation(@PathVariable long id) {
         donationService.deleteDonation(id);
+    }
+
+    @GetMapping("/getdonationBycompatible")
+    public List<Donation> getdonationBycompatible (@RequestBody Receiver receiver){
+        return donationService.getdonationBycompatible(receiver);
     }
 
 }

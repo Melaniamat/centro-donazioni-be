@@ -3,6 +3,7 @@ package it.corsojava.progettodonazioni.entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.corsojava.progettodonazioni.enumerator.Badge;
 import it.corsojava.progettodonazioni.enumerator.BloodType;
+import it.corsojava.progettodonazioni.enumerator.RH;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -20,6 +21,12 @@ public class Donor extends Person {
     private BloodType bloodType;
     @Column
     private LocalDate birthdate;
+    @Column
+    private String address;
+    @Column
+    private String CAP;
+    @Column
+    private String location;
     @Column
     private LocalDate lastDonationDate;
     @Column
@@ -40,10 +47,14 @@ public class Donor extends Person {
     @OneToMany(mappedBy = "donor", fetch = FetchType.EAGER)
     List<Donation> donationList;
 
+    @Enumerated
+    @Column (name = "RH")
+    private RH rh;
+
 
     public Donor(BloodType bloodType, String name, String surname, String email, String username, String password, String sex,
                  LocalDate birthdate, LocalDate lastDonationDate, boolean abilitated, int numberOfDonations, double weight,
-                 Badge badge) {
+                 Badge badge,RH rh,String address, String CAP, String location) {
         super(name, surname, email, username, password);
         this.bloodType = bloodType;
         this.sex = sex;
@@ -53,11 +64,18 @@ public class Donor extends Person {
         this.numberOfDonations = numberOfDonations;
         this.badge = badge;
         this.weight = weight;
+        this.rh=rh;
+        this.address=address;
+        this.CAP=CAP;
+        this.location=location;
 
     }
+
 
     public Donor() {
     }
+
+
 
     public String getSex() {
         return sex;
@@ -137,6 +155,42 @@ public class Donor extends Person {
 
     public void setSubscriptionDate(LocalDate subscriptionDate) {
         this.subscriptionDate = subscriptionDate;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public RH getRh() {
+        return rh;
+    }
+
+    public void setRh(RH rh) {
+        this.rh = rh;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCAP() {
+        return CAP;
+    }
+
+    public void setCAP(String CAP) {
+        this.CAP = CAP;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override

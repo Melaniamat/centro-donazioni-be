@@ -36,6 +36,9 @@ public class Donation {
     @Column
     private Status status;
 
+    @Column
+    private  boolean availability;
+
     public Donation(Doctor doctor, DonationCenter donationCenter, Donor donor, LocalDate date, Status status) {
         this.doctor = doctor;
         this.donationCenter = donationCenter;
@@ -98,5 +101,11 @@ public class Donation {
         this.status = status;
     }
 
+    public boolean isAvailability() {
+        return availability;
+    }
 
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
+    }
 }

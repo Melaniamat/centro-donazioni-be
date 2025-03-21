@@ -20,6 +20,11 @@ public class DonationCenter {
 
     @Column
     private String address;
+    @Column
+    private String CAP;
+
+    @Column
+    private String location;
 
     @Column
     private String phoneNumber;
@@ -31,10 +36,12 @@ public class DonationCenter {
     @JsonIgnore
     private List<Donation> donations;
 
-    public DonationCenter(String name,String address,String phoneNumber) {
+    public DonationCenter(String name,String address,String phoneNumber,String CAP, String location) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.CAP = CAP;
+        this.location = location;
     }
 
     public DonationCenter() {
@@ -88,4 +95,19 @@ public class DonationCenter {
         this.donations = donations;
     }
 
+    public String getCAP() {
+        return CAP;
+    }
+
+    public void setCAP(String CAP) {
+        this.CAP = CAP;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

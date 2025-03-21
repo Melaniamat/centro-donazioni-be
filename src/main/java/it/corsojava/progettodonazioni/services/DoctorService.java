@@ -7,6 +7,8 @@ import it.corsojava.progettodonazioni.repositories.DonationCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.sound.midi.Receiver;
+
 @Service
 public class DoctorService {
 
@@ -15,6 +17,11 @@ public class DoctorService {
 
     @Autowired
     DonationCenterRepository donationCenterRepository;
+
+    @Autowired
+    DonationService donationService;
+
+
 
     public Doctor saveDoctor(long id, Doctor doctor) {
         DonationCenter donationCenter = donationCenterRepository.getById(id);
@@ -48,6 +55,11 @@ public class DoctorService {
 
     public void deleteDoctor(long id) {
         doctorRepository.deleteById(id);
+    }
+
+    public void assignDonation(long id){
+
+
     }
 
 }
