@@ -2,11 +2,14 @@ package it.corsojava.progettodonazioni.services;
 
 import it.corsojava.progettodonazioni.entities.Receiver;
 import it.corsojava.progettodonazioni.repositories.ReceiverRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+
+import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
 public class ReceiverService {
@@ -24,7 +27,7 @@ public class ReceiverService {
         if (receiverRepository.existsById(id)) {
             return receiverRepository.getById(id);
         } else {
-            return null;
+            throw new EntityNotFoundException(NOT_FOUND);
         }
     }
 
@@ -42,7 +45,7 @@ public class ReceiverService {
             }
             return receiverRepository.save(receiverToUpdate);
         } else {
-            return null;
+            throw new EntityNotFoundException(NOT_FOUND);
         }
     }
 

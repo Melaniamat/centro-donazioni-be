@@ -4,13 +4,14 @@ import it.corsojava.progettodonazioni.entities.Doctor;
 import it.corsojava.progettodonazioni.entities.DonationCenter;
 import it.corsojava.progettodonazioni.repositories.DoctorRepository;
 import it.corsojava.progettodonazioni.repositories.DonationCenterRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
 
-import javax.sound.midi.Receiver;
+import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
 public class DoctorService {
@@ -20,11 +21,6 @@ public class DoctorService {
 
     @Autowired
     DonationCenterRepository donationCenterRepository;
-
-    @Autowired
-    DonationService donationService;
-
-
 
     public Doctor saveDoctor(long id, Doctor doctor) {
         DonationCenter donationCenter = donationCenterRepository.getById(id);
@@ -38,22 +34,26 @@ public class DoctorService {
         if (doctorRepository.existsById(id)) {
             return doctorRepository.getById(id);
         } else {
-            return null;
+            throw new EntityNotFoundException(NOT_FOUND);
         }
     }
 
     public Doctor updateDoctor(long id, Doctor doctor) {
-        Doctor doctorToUpdate = doctorRepository.getById(id);
-        if (null != doctor.getEmail()) {
-            doctorToUpdate.setEmail(doctor.getEmail());
+        if (doctorRepository.existsById(id)) {
+            Doctor doctorToUpdate = doctorRepository.getById(id);
+            if (null != doctor.getEmail()) {
+                doctorToUpdate.setEmail(doctor.getEmail());
+            }
+            if (null != doctor.getPhoneNumber()) {
+                doctorToUpdate.setPhoneNumber(doctor.getPhoneNumber());
+            }
+            if (null != doctor.getUsername()) {
+                doctorToUpdate.setUsername(doctor.getUsername());
+            }
+            return doctorRepository.save(doctorToUpdate);
+        } else {
+            throw new EntityNotFoundException(NOT_FOUND);
         }
-        if (null != doctor.getPhoneNumber()) {
-            doctorToUpdate.setPhoneNumber(doctor.getPhoneNumber());
-        }
-        if (null != doctor.getUsername()) {
-            doctorToUpdate.setUsername(doctor.getUsername());
-        }
-        return doctorRepository.save(doctorToUpdate);
     }
 
     public void deleteDoctor(long id) {
@@ -65,11 +65,6 @@ public class DoctorService {
         List<Doctor> doctors = doctorRepository.findAll();
         doctors.sort(Comparator.comparing(Doctor::getSurname));
         return doctors;
-    }
-
-    public void assignDonation(long id){
-
-
     }
 
 }

@@ -1,5 +1,6 @@
 package it.corsojava.progettodonazioni.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.corsojava.progettodonazioni.enumerator.Badge;
 import it.corsojava.progettodonazioni.enumerator.BloodType;
@@ -27,10 +28,10 @@ public class Donor extends Person {
 
     @Column
     private String address;
-    @Column
-    private String CAP;
+
     @Column
     private String location;
+
     @Column
     private LocalDate lastDonationDate;
 
@@ -51,16 +52,17 @@ public class Donor extends Person {
     private LocalDate subscriptionDate;
 
     @OneToMany(mappedBy = "donor", fetch = FetchType.EAGER)
-    List<Donation> donationList;
+    @JsonIgnore
+    List<Donation> donations;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column (name = "RH")
     private RH rh;
 
 
-    public Donor(BloodType bloodType, String name, String surname, String email, String username, String password, String sex,
-                 LocalDate birthdate, LocalDate lastDonationDate, boolean abilitated, int numberOfDonations, double weight,
-                 Badge badge,RH rh,String address, String CAP, String location) {
+    public Donor(BloodType bloodType, String name, String surname, String email, String username, String password,
+                 String sex, LocalDate birthdate, LocalDate lastDonationDate, boolean abilitated, int numberOfDonations,
+                 double weight, RH rh, String address, String location) {
         super(name, surname, email, username, password);
         this.bloodType = bloodType;
         this.sex = sex;
@@ -68,20 +70,14 @@ public class Donor extends Person {
         this.lastDonationDate = lastDonationDate;
         this.abilitated = abilitated;
         this.numberOfDonations = numberOfDonations;
-        this.badge = badge;
         this.weight = weight;
         this.rh=rh;
         this.address=address;
-        this.CAP=CAP;
         this.location=location;
-
     }
-
 
     public Donor() {
     }
-
-
 
     public String getSex() {
         return sex;
@@ -123,12 +119,12 @@ public class Donor extends Person {
         this.abilitated = abilitated;
     }
 
-    public List<Donation> getDonationList() {
-        return donationList;
+    public List<Donation> getDonations() {
+        return donations;
     }
 
-    public void setDonationList(List<Donation> donationList) {
-        this.donationList = donationList;
+    public void setDonations(List<Donation> donations) {
+        this.donations = donations;
     }
 
     public int getNumberOfDonations() {
@@ -183,25 +179,12 @@ public class Donor extends Person {
         this.address = address;
     }
 
-    public String getCAP() {
-        return CAP;
-    }
-
-    public void setCAP(String CAP) {
-        this.CAP = CAP;
-    }
-
     public String getLocation() {
         return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    @Override
-    public String calculateCode() {
-        return this.getSurname() + this.getId();
     }
 
     public Badge calculateBadge() {
@@ -231,5 +214,11 @@ public class Donor extends Person {
         }
         return badge;
     }
+
+    @Override
+    public String calculateCode() {
+        return this.getSurname() + this.getId();
+    }
+
 }
 

@@ -1,7 +1,6 @@
 package it.corsojava.progettodonazioni.services;
 
 import it.corsojava.progettodonazioni.entities.*;
-import it.corsojava.progettodonazioni.enumerator.Badge;
 import it.corsojava.progettodonazioni.enumerator.Role;
 import it.corsojava.progettodonazioni.enumerator.Status;
 import it.corsojava.progettodonazioni.entities.Donation;
@@ -12,6 +11,7 @@ import it.corsojava.progettodonazioni.enumerator.*;
 import it.corsojava.progettodonazioni.repositories.*;
 import it.corsojava.progettodonazioni.request.DonationSaveRequest;
 import it.corsojava.progettodonazioni.request.DonationUpdateRequest;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +47,7 @@ public class DonationService {
         donation.setStatus(Status.SCHEDULED);
         donation.setDate(LocalDate.now());
         Donor donor = donorService.findDonorById(request.getDonorId());
+
         if ((donor.getSex().equals("M") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
                 (donor.getSex().equals("F") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
             donation.setStatus(Status.REFUSED);
@@ -56,52 +57,49 @@ public class DonationService {
             donation.setDoctor(doctorService.findDoctorById(request.getDoctorId()));
             donation.setDonationCenter(donationCenterService.findDonationCenterById(request.getCenterId()));
         }
+        DonationCenter donationCenter = donationCenterService.findDonationCenterById(request.getCenterId());
+        int totalDonations = donationCenter.getTotalDonations();
+        totalDonations++;
+        donationCenter.setTotalDonations(totalDonations);
+        donationCenterService.saveDonationCenter(donationCenter);
         return donationRepository.save(donation);
+    }
+
+    public List<Donation> getdonationBycompatible(Receiver receiver) {
+        RH recRh = receiver.getRh();
+        BloodType recBloodType = receiver.getBloodType();
+        List<Donation> allDonations = donationRepository.findAll();
+        List<Donation> newList = new ArrayList<>();
+        for (Donation donation : allDonations) {
+            BloodType donBloodType = donation.getDonor().getBloodType();
+            RH donRh = donation.getDonor().getRh();
+            if (donation.isAvailability() && donation.getStatus().equals(Status.COMPLETED)) {
+                if (recBloodType == donBloodType && recRh == donRh || recBloodType == donBloodType && donRh == RH.NEGATIVE) {
+                    newList.add(donation);
+                } else if (recBloodType == BloodType.AB && recRh == RH.POSITIVE ||
+                        donBloodType == BloodType.O && donRh == RH.NEGATIVE) {
+                    newList.add(donation);
+                } else if (recBloodType == BloodType.AB && donRh == RH.NEGATIVE ||
+                        donBloodType == BloodType.O && recRh == RH.POSITIVE) {
+                    if (recRh == donRh) {
+                        newList.add(donation);
+                    }
+                }
+                return newList;
+            } else {
+                System.out.println(NOT_AUTHORIZED);
+            }
+        }
+        return newList;
     }
 
     public Donation findDonationById(long id) {
         if (donationRepository.existsById(id)) {
             return donationRepository.getById(id);
         } else {
-            return null;
+            throw new EntityNotFoundException(NOT_FOUND);
         }
     }
-
-    public List<Donation> getdonationBycompatible (Receiver receiver){
-        RH recRh= receiver.getRh();
-        BloodType recBloodType= receiver.getBloodType();
-        List<Donation> allDonations=donationRepository.findAll();
-        List<Donation>newList=new ArrayList<>();
-            for (Donation donation:allDonations) {
-                BloodType donBloodType = donation.getDonor().getBloodType();
-                RH donRh = donation.getDonor().getRh();
-                if (donation.isAvailability() && donation.getStatus().equals(Status.COMPLETED)) {
-                    if (recBloodType == donBloodType && recRh == donRh || recBloodType == donBloodType && donRh == RH.NEGATIVE) {
-                        newList.add(donation);
-                    } else if (recBloodType == BloodType.AB && recRh == RH.POSITIVE ||
-                            donBloodType == BloodType.O && donRh == RH.NEGATIVE) {
-                        newList.add(donation);
-                    } else if (recBloodType == BloodType.AB && donRh == RH.NEGATIVE ||
-                            donBloodType == BloodType.O && recRh == RH.POSITIVE) {
-                        if (recRh == donRh) {
-                            newList.add(donation);
-                        }
-                    } return newList;
-                } else {
-                    System.out.println(NOT_AUTHORIZED);
-                }
-            } return newList;
-
-            }
-
-
-
-
-
-
-
-
-
 
     public Donation updateDonation(DonationUpdateRequest request) {
         Employee employee = employeeService.findEmployeeById(request.getEmployeeId());
@@ -110,6 +108,7 @@ public class DonationService {
             return donation;
         } else {
             donation.setStatus(Status.COMPLETED);
+            donation.setAvailability(true);
             Donor donor = donation.getDonor();
             donor.setNumberOfDonations(donor.getNumberOfDonations()+1);
             donor.setBadge(donor.calculateBadge());
@@ -134,4 +133,9 @@ public class DonationService {
         return donationRepository.findByDonationCenterId(id);
     }
 
+    public List<Donation> findAllByDate() {
+        List<Donation> donations = donationRepository.findAll();
+        donations.sort(Comparator.comparing(Donation :: getDate));
+        return donations;
+    }
 }

@@ -2,11 +2,14 @@ package it.corsojava.progettodonazioni.services;
 
 import it.corsojava.progettodonazioni.entities.Employee;
 import it.corsojava.progettodonazioni.repositories.EmployeeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+
+import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
 public class EmployeeService {
@@ -31,7 +34,7 @@ public class EmployeeService {
             }
             return employeeRepository.save(updatedEmployee);
         } else {
-            return null;
+            throw new EntityNotFoundException(NOT_FOUND);
         }
     }
 
@@ -39,7 +42,7 @@ public class EmployeeService {
         if (employeeRepository.existsById(id)) {
             return employeeRepository.getById(id);
         } else {
-            return null;
+            throw new EntityNotFoundException(NOT_FOUND);
         }
     }
 

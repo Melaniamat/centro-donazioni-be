@@ -20,14 +20,18 @@ public class DonationCenter {
 
     @Column
     private String address;
-    @Column
-    private String CAP;
 
     @Column
     private String location;
 
     @Column
+    private String region;
+
+    @Column
     private String phoneNumber;
+
+    @Column(name = "total_donations")
+    private int totalDonations;
 
     @OneToMany(mappedBy = "donationCenter", fetch = FetchType.EAGER)
     private List<Doctor> doctors;
@@ -36,11 +40,11 @@ public class DonationCenter {
     @JsonIgnore
     private List<Donation> donations;
 
-    public DonationCenter(String name,String address,String phoneNumber,String CAP, String location) {
+    public DonationCenter(String name,String address,String phoneNumber,String region, String location) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.CAP = CAP;
+        this.region = region;
         this.location = location;
     }
 
@@ -95,12 +99,12 @@ public class DonationCenter {
         this.donations = donations;
     }
 
-    public String getCAP() {
-        return CAP;
+    public String getRegion() {
+        return region;
     }
 
-    public void setCAP(String CAP) {
-        this.CAP = CAP;
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public String getLocation() {
@@ -110,4 +114,13 @@ public class DonationCenter {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public int getTotalDonations() {
+        return totalDonations;
+    }
+
+    public void setTotalDonations(int totalDonations) {
+        this.totalDonations = totalDonations;
+    }
+
 }

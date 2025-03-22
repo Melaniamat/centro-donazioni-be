@@ -5,6 +5,7 @@ import it.corsojava.progettodonazioni.entities.Donor;
 import it.corsojava.progettodonazioni.enumerator.BloodType;
 import it.corsojava.progettodonazioni.enumerator.Status;
 import it.corsojava.progettodonazioni.repositories.DonorRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+
+import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
 public class DonorService {
@@ -32,14 +36,36 @@ public class DonorService {
     }
 
     public Donor findDonorById(long id) {
-        return donorRepository.getById(id);
+        if (donorRepository.existsById(id)) {
+            return donorRepository.getById(id);
+        } else {
+            throw new EntityNotFoundException(NOT_FOUND);
+        }
     }
 
     public Donor updateDonor(long id, Donor donor) {
-        Donor donorUpdated = donorRepository.getById(id);
-        donorUpdated.setName(donor.getName());
-        donorUpdated.setSurname(donor.getSurname());
-        return donorRepository.save(donorUpdated);
+        if (donorRepository.existsById(id)) {
+            Donor donorUpdated = donorRepository.getById(id);
+            if (donor.getNumberOfDonations() != 0) {
+                donorUpdated.setNumberOfDonations(donor.getNumberOfDonations());
+                donorUpdated.setBadge(donor.calculateBadge());
+            }
+            if (donor.getAddress() != null) {
+                donorUpdated.setAddress(donor.getAddress());
+            }
+            if (donor.getRh() != null) {
+                donorUpdated.setRh(donorUpdated.getRh());
+            }
+            if (donor.getLocation() != null) {
+                donorUpdated.setLocation(donor.getLocation());
+            }
+            if (donor.getWeight() != 0) {
+                donorUpdated.setWeight(donor.getWeight());
+            }
+            return donorRepository.save(donorUpdated);
+        } else {
+            throw new EntityNotFoundException(NOT_FOUND);
+        }
     }
 
     public void deleteDonor(long id) {

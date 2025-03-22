@@ -37,7 +37,7 @@ public class Donation {
     private Status status;
 
     @Column
-    private  boolean availability;
+    private boolean availability;
 
     public Donation(Doctor doctor, DonationCenter donationCenter, Donor donor, LocalDate date, Status status) {
         this.doctor = doctor;
@@ -45,9 +45,6 @@ public class Donation {
         this.donor = donor;
         this.date = date;
         this.status = status;
-    }
-
-    public Donation(long id,Doctor doctor,DonationCenter donationCenter,Donor donor,LocalDate date, Status status) {
     }
 
     public Donation() {
