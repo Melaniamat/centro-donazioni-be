@@ -57,9 +57,9 @@ public class DonationController {
         donationService.deleteDonation(id);
     }
 
-    @GetMapping("/getdonationBycompatible")
-    public List<Donation> getdonationBycompatible (@RequestBody Receiver receiver){
-        return donationService.getdonationBycompatible(receiver);
+    @GetMapping("/getdonationBycompatible/{id}")
+    public void getdonationBycompatible (@PathVariable long id ){
+        donationService.getdonationBycompatible(id);
     }
 
 }

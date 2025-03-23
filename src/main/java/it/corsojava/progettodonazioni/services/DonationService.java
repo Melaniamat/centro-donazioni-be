@@ -42,12 +42,14 @@ public class DonationService {
     @Autowired
     EmployeeService employeeService;
 
+    @Autowired
+    ReceiverService receiverService;
+
     public Donation saveDonation(DonationSaveRequest request) {
         Donation donation = new Donation();
         donation.setStatus(Status.SCHEDULED);
         donation.setDate(LocalDate.now());
         Donor donor = donorService.findDonorById(request.getDonorId());
-
         if ((donor.getSex().equals("M") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
                 (donor.getSex().equals("F") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
             donation.setStatus(Status.REFUSED);
@@ -65,7 +67,7 @@ public class DonationService {
         return donationRepository.save(donation);
     }
 
-    public List<Donation> getdonationBycompatible(Receiver receiver) {
+    public void getdonationBycompatible(Receiver receiver) {
         RH recRh = receiver.getRh();
         BloodType recBloodType = receiver.getBloodType();
         List<Donation> allDonations = donationRepository.findAll();
@@ -85,12 +87,10 @@ public class DonationService {
                         newList.add(donation);
                     }
                 }
-                return newList;
             } else {
                 System.out.println(NOT_AUTHORIZED);
             }
         }
-        return newList;
     }
 
     public Donation findDonationById(long id) {

@@ -17,6 +17,10 @@ public class Donation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @OneToOne
+    @JoinColumn(name = "receiver_id")
+    private Receiver receiver;
+
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
@@ -105,4 +109,13 @@ public class Donation {
     public void setAvailability(boolean availability) {
         this.availability = availability;
     }
+
+    public Receiver getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(Receiver receiver) {
+        this.receiver = receiver;
+    }
 }
+

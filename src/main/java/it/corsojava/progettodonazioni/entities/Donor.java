@@ -53,7 +53,7 @@ public class Donor extends Person {
 
     @OneToMany(mappedBy = "donor", fetch = FetchType.EAGER)
     @JsonIgnore
-    List<Donation> donations;
+    List<Donation> donationList;
 
     @Enumerated(EnumType.STRING)
     @Column (name = "RH")
@@ -119,12 +119,12 @@ public class Donor extends Person {
         this.abilitated = abilitated;
     }
 
-    public List<Donation> getDonations() {
-        return donations;
+    public List<Donation> getDonationList() {
+        return donationList;
     }
 
-    public void setDonations(List<Donation> donations) {
-        this.donations = donations;
+    public void setDonationList(List<Donation> donationList) {
+        this.donationList = donationList;
     }
 
     public int getNumberOfDonations() {
@@ -188,7 +188,7 @@ public class Donor extends Person {
     }
 
     public Badge calculateBadge() {
-        if (Period.between(this.birthdate, LocalDate.now()).getYears() > 60 && this.numberOfDonations >= 120) {
+        if (Period.between(this.birthdate, LocalDate.now()).getYears() > 65 && this.numberOfDonations >= 120) {
             this.setBadge(Badge.DIAMOND);
             this.setAbilitated(false);
         } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 40 && this.numberOfDonations >= 80
