@@ -26,17 +26,15 @@ public class DonorService {
     public Donor saveDonor(Donor donor) {
         int age = Period.between(donor.getBirthDate(), LocalDate.now()).getYears();
         double weight = donor.getWeight();
-
-            if (age >= 18 && age <= 65 && weight >= 50) {
-                Donor donorSaved = donorRepository.save(donor);
-                donorSaved.setCode(donorSaved.calculateCode());
-                donorSaved.setBadge(donorSaved.calculateBadge());
-                return donorRepository.save(donorSaved);
-            } else {
-                throw new IllegalArgumentException();
-            }
-
-            }
+        if (age >= 18 && age <= 65 && weight >= 50) {
+            Donor donorSaved = donorRepository.save(donor);
+            donorSaved.setCode(donorSaved.calculateCode());
+            donorSaved.setBadge(donorSaved.calculateBadge());
+            return donorRepository.save(donorSaved);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
 
 
     public Donor findDonorById(long id) {
@@ -83,10 +81,4 @@ public class DonorService {
             return donors;
         }
 
-        public List<Donor> findAllDonorsByBloodType (BloodType bloodType){
-            return donorRepository.findAll();
-        }
-
-
-    }
-
+}

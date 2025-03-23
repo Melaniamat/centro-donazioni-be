@@ -99,9 +99,6 @@ public class Receiver extends Person {
         return getSurname()+getId();
     }
 
-
-
-
     public void receiveDonation(Donation donation) {
 
 
