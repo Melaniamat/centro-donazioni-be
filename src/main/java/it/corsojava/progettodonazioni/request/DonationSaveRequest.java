@@ -4,12 +4,12 @@ public class DonationSaveRequest {
 
     private long doctorId;
     private long donorId;
-    private long centerId;
+    private long donationCenterId;
 
-    public DonationSaveRequest(long doctorId,long donorId,long centerId) {
+    public DonationSaveRequest(long doctorId,long donorId,long donationCenterId) {
         this.doctorId = doctorId;
         this.donorId = donorId;
-        this.centerId = centerId;
+        this.donationCenterId = donationCenterId;
     }
 
     public long getDoctorId() {
@@ -28,12 +28,12 @@ public class DonationSaveRequest {
         this.donorId = donorId;
     }
 
-    public long getCenterId() {
-        return centerId;
+    public long getDonationCenterId() {
+        return donationCenterId;
     }
 
-    public void setCenterId(long centerId) {
-        this.centerId = centerId;
+    public void setDonationCenterId(long donationCenterId) {
+        this.donationCenterId = donationCenterId;
     }
 
 }

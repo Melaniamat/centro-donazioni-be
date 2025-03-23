@@ -55,9 +55,9 @@ public class DonationService {
         } else {
             donation.setDonor(donorService.findDonorById(request.getDonorId()));
             donation.setDoctor(doctorService.findDoctorById(request.getDoctorId()));
-            donation.setDonationCenter(donationCenterService.findDonationCenterById(request.getCenterId()));
+            donation.setDonationCenter(donationCenterService.findDonationCenterById(request.getDonationCenterId()));
         }
-        DonationCenter donationCenter = donationCenterService.findDonationCenterById(request.getCenterId());
+        DonationCenter donationCenter = donationCenterService.findDonationCenterById(request.getDonationCenterId());
         int totalDonations = donationCenter.getTotalDonations();
         totalDonations++;
         donationCenter.setTotalDonations(totalDonations);
