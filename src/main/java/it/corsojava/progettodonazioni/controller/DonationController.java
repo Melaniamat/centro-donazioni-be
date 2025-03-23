@@ -5,6 +5,7 @@ import it.corsojava.progettodonazioni.entities.Receiver;
 import it.corsojava.progettodonazioni.request.DonationSaveRequest;
 import it.corsojava.progettodonazioni.request.DonationUpdateRequest;
 import it.corsojava.progettodonazioni.services.DonationService;
+import it.corsojava.progettodonazioni.services.ReceiverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +59,7 @@ public class DonationController {
     }
 
     @GetMapping("/getdonationBycompatible/{id}")
-    public void getdonationBycompatible (@PathVariable long id ){
+    public void getdonationBycompatible (@PathVariable long id){
         donationService.getdonationBycompatible(id);
     }
 

@@ -31,10 +31,10 @@ public class DonationService {
     DonationRepository donationRepository;
 
     @Autowired
-    DoctorService doctorService;
+    DonorService donorService;
 
     @Autowired
-    DonorService donorService;
+    DoctorService doctorService;
 
     @Autowired
     DonationCenterService donationCenterService;
@@ -76,11 +76,13 @@ public class DonationService {
         }
     }
 
-    public void getdonationBycompatible(Receiver receiver) {
+    public void getdonationBycompatible(long idReceiver) {
+        Receiver receiver = receiverService.findReceiverById(idReceiver);
         RH recRh = receiver.getRh();
         BloodType recBloodType = receiver.getBloodType();
         List<Donation> allDonations = donationRepository.findAll();
         List<Donation> newList = new ArrayList<>();
+        try {
         for (Donation donation : allDonations) {
             BloodType donBloodType = donation.getDonor().getBloodType();
             RH donRh = donation.getDonor().getRh();
@@ -99,12 +101,13 @@ public class DonationService {
             } else {
                 System.out.println(NOT_AUTHORIZED);
             }
-            Donation donation = newList.getFirst();
-            donation.setReceiver(receiverService.findReceiverById(idReiceiver));
-            donation.setStatus(Status.ASSIGNED);
-            donation.setAvailability(false);
-            donationRepository.save(donation);
-        } catch (Exception e) {
+            Donation donationCompatible = newList.getFirst();
+            donationCompatible.setReceiver(receiver);
+            donationCompatible.setStatus(Status.ASSIGNED);
+            donationCompatible.setAvailability(false);
+            donationRepository.save(donationCompatible);
+        }
+    } catch (Exception e) {
             System.out.println(NOT_FOUND);
         }
     }
