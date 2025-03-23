@@ -12,6 +12,6 @@ public interface DonationRepository extends JpaRepository<Donation,Long> {
 
     List<Donation> findByDoctorId(long doctorId);
     List<Donation> findByDonorId(long donorId);
-    List<Donation> findByDonationCenterId(long centerId);
+    List<Donation> findByDonationCenterId(long donationCenterId);
 
 }

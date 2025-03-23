@@ -1,5 +1,6 @@
 package it.corsojava.progettodonazioni.services;
 
+import it.corsojava.progettodonazioni.entities.*;
 import it.corsojava.progettodonazioni.enumerator.Role;
 import it.corsojava.progettodonazioni.enumerator.Status;
 import it.corsojava.progettodonazioni.entities.Donation;
@@ -10,6 +11,7 @@ import it.corsojava.progettodonazioni.enumerator.*;
 import it.corsojava.progettodonazioni.repositories.*;
 import it.corsojava.progettodonazioni.request.DonationSaveRequest;
 import it.corsojava.progettodonazioni.request.DonationUpdateRequest;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.corsojava.progettodonazioni.costants.Costant.NOT_AUTHORIZED;
 import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
@@ -47,6 +50,7 @@ public class DonationService {
         donation.setStatus(Status.SCHEDULED);
         donation.setDate(LocalDate.now());
         Donor donor = donorService.findDonorById(request.getDonorId());
+
         if ((donor.getSex().equals("M") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
                 (donor.getSex().equals("F") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
             donation.setStatus(Status.REFUSED);
@@ -56,6 +60,11 @@ public class DonationService {
             donation.setDoctor(doctorService.findDoctorById(request.getDoctorId()));
             donation.setDonationCenter(donationCenterService.findDonationCenterById(request.getDonationCenterId()));
         }
+        DonationCenter donationCenter = donationCenterService.findDonationCenterById(request.getDonationCenterId());
+        int totalDonations = donationCenter.getTotalDonations();
+        totalDonations++;
+        donationCenter.setTotalDonations(totalDonations);
+        donationCenterService.saveDonationCenter(donationCenter);
         return donationRepository.save(donation);
     }
 
@@ -63,7 +72,7 @@ public class DonationService {
         if (donationRepository.existsById(id)) {
             return donationRepository.getById(id);
         } else {
-            return null;
+            throw new EntityNotFoundException(NOT_FOUND);
         }
     }
 
@@ -120,6 +129,7 @@ public class DonationService {
             return donation;
         } else {
             donation.setStatus(Status.COMPLETED);
+            donation.setAvailability(true);
             Donor donor = donation.getDonor();
             donor.setNumberOfDonations(donor.getNumberOfDonations()+1);
             donor.setBadge(donor.calculateBadge());
@@ -130,12 +140,6 @@ public class DonationService {
 
     public void deleteDonation(long id) {
         donationRepository.deleteById(id);
-    }
-
-    public List<Donation> findAllByDate() {
-        List<Donation> donations = donationRepository.findAll();
-        donations.sort(Comparator.comparing(Donation :: getDate));
-        return donations;
     }
 
     public List<Donation> findAllByIdDoctor(long id) {
@@ -150,4 +154,9 @@ public class DonationService {
         return donationRepository.findByDonationCenterId(id);
     }
 
+    public List<Donation> findAllByDate() {
+        List<Donation> donations = donationRepository.findAll();
+        donations.sort(Comparator.comparing(Donation :: getDate));
+        return donations;
+    }
 }

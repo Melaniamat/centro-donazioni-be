@@ -32,8 +32,8 @@ public class DonationSaveRequest {
         return donationCenterId;
     }
 
-    public void setCenterId(long donationCenterIdcenterId) {
-        this.donationCenterId= donationCenterIdcenterId;
+    public void setDonationCenterId(long donationCenterId) {
+        this.donationCenterId = donationCenterId;
     }
 
 }

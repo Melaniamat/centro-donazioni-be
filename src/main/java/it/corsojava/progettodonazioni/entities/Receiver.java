@@ -20,27 +20,26 @@ public class Receiver extends Person {
     @Column(name = "RH")
     private RH rh;
 
+    @OneToOne
+    @JoinColumn(name= "donation_id")
+    Donation donation;
+
     @Column
     private String location;
 
     @Column
-    private String address;
+    private String region;
 
     @Column
-    private String CAP;
-
-    @OneToOne
-    @JoinColumn (name = "donation_id")
-    private Donation donation;
-
+    private String address;
 
     public Receiver(String name, String surname, String email, String username, String password,
-                    BloodType bloodType,RH rh, String location, String address,String CAP) {
+                    BloodType bloodType,RH rh, String location, String address,String region) {
         super(name, surname, email, username, password);
         this.bloodType = bloodType;
         this.rh=rh;
         this.address=address;
-        this.CAP=CAP;
+        this.region=region;
         this.location=location;
     }
 
@@ -79,12 +78,12 @@ public class Receiver extends Person {
         this.address = address;
     }
 
-    public String getCAP() {
-        return CAP;
+    public String getRegion() {
+        return region;
     }
 
-    public void setCAP(String CAP) {
-        this.CAP = CAP;
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public Donation getDonation() {
