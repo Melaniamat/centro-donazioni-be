@@ -1,5 +1,6 @@
 package it.corsojava.progettodonazioni.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.corsojava.progettodonazioni.enumerator.Badge;
 import it.corsojava.progettodonazioni.enumerator.BloodType;
@@ -51,9 +52,10 @@ public class Donor extends Person {
     private LocalDate subscriptionDate;
 
     @OneToMany(mappedBy = "donor", fetch = FetchType.EAGER)
+    @JsonIgnore
     List<Donation> donationList;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column (name = "RH")
     private RH rh;
 
@@ -205,7 +207,7 @@ public class Donor extends Person {
     }
 
     public Badge calculateBadge() {
-        if (Period.between(this.birthdate, LocalDate.now()).getYears() > 60 && this.numberOfDonations >= 120) {
+        if (Period.between(this.birthdate, LocalDate.now()).getYears() > 65 && this.numberOfDonations >= 120) {
             this.setBadge(Badge.DIAMOND);
             this.setAbilitated(false);
         } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 40 && this.numberOfDonations >= 80

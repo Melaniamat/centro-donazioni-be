@@ -1,7 +1,5 @@
 package it.corsojava.progettodonazioni.services;
 
-import it.corsojava.progettodonazioni.entities.*;
-import it.corsojava.progettodonazioni.enumerator.Badge;
 import it.corsojava.progettodonazioni.enumerator.Role;
 import it.corsojava.progettodonazioni.enumerator.Status;
 import it.corsojava.progettodonazioni.entities.Donation;
@@ -21,7 +19,6 @@ import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.corsojava.progettodonazioni.costants.Costant.NOT_AUTHORIZED;
 import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
@@ -42,6 +39,9 @@ public class DonationService {
     @Autowired
     EmployeeService employeeService;
 
+    @Autowired
+    ReceiverService receiverService;
+
     public Donation saveDonation(DonationSaveRequest request) {
         Donation donation = new Donation();
         donation.setStatus(Status.SCHEDULED);
@@ -54,7 +54,7 @@ public class DonationService {
         } else {
             donation.setDonor(donorService.findDonorById(request.getDonorId()));
             donation.setDoctor(doctorService.findDoctorById(request.getDoctorId()));
-            donation.setDonationCenter(donationCenterService.findDonationCenterById(request.getCenterId()));
+            donation.setDonationCenter(donationCenterService.findDonationCenterById(request.getDonationCenterId()));
         }
         return donationRepository.save(donation);
     }
@@ -67,11 +67,13 @@ public class DonationService {
         }
     }
 
-    public List<Donation> getdonationBycompatible (Receiver receiver){
-        RH recRh= receiver.getRh();
-        BloodType recBloodType= receiver.getBloodType();
+    public void getdonationBycompatible (long idReiceiver){
+        RH recRh= receiverService.findReceiverById(idReiceiver).getRh();
+        BloodType recBloodType= receiverService.findReceiverById(idReiceiver).getBloodType();
         List<Donation> allDonations=donationRepository.findAll();
         List<Donation>newList=new ArrayList<>();
+        Receiver receiver= receiverService.findReceiverById(idReiceiver);
+        try {
             for (Donation donation:allDonations) {
                 BloodType donBloodType = donation.getDonor().getBloodType();
                 RH donRh = donation.getDonor().getRh();
@@ -79,20 +81,28 @@ public class DonationService {
                     if (recBloodType == donBloodType && recRh == donRh || recBloodType == donBloodType && donRh == RH.NEGATIVE) {
                         newList.add(donation);
                     } else if (recBloodType == BloodType.AB && recRh == RH.POSITIVE ||
+                            recBloodType == BloodType.AB && donRh == RH.NEGATIVE) {
+                        newList.add(donation);
+                    } else if (donBloodType == BloodType.O && recRh == RH.POSITIVE ||
                             donBloodType == BloodType.O && donRh == RH.NEGATIVE) {
                         newList.add(donation);
-                    } else if (recBloodType == BloodType.AB && donRh == RH.NEGATIVE ||
-                            donBloodType == BloodType.O && recRh == RH.POSITIVE) {
-                        if (recRh == donRh) {
-                            newList.add(donation);
-                        }
-                    } return newList;
-                } else {
-                    System.out.println(NOT_AUTHORIZED);
+                    }
                 }
-            } return newList;
-
             }
+             Donation donation=newList.getFirst();
+            donation.setReceiver(receiverService.findReceiverById(idReiceiver));
+            donation.setStatus(Status.ASSIGNED);
+            donation.setAvailability(false);
+            donationRepository.save(donation);
+
+
+        } catch (Exception e) {
+            System.out.println(NOT_FOUND);
+        }
+
+
+
+    }
 
 
 

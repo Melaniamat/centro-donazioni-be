@@ -16,25 +16,29 @@ public class Receiver extends Person {
     @Column(name = "blood_type")
     private BloodType bloodType;
 
-
     @Enumerated(EnumType.STRING)
     @Column(name = "RH")
     private RH rh;
 
     @Column
-     private String location;
+    private String location;
+
     @Column
     private String address;
+
     @Column
     private String CAP;
 
+    @OneToOne
+    @JoinColumn (name = "donation_id")
+    private Donation donation;
 
 
-    public Receiver(String name, String surname, String email, String username, String password, BloodType bloodType,RH rh, String location, String address,String CAP) {
+    public Receiver(String name, String surname, String email, String username, String password,
+                    BloodType bloodType,RH rh, String location, String address,String CAP) {
         super(name, surname, email, username, password);
         this.bloodType = bloodType;
         this.rh=rh;
-        this.location=location;
         this.address=address;
         this.CAP=CAP;
         this.location=location;
@@ -83,10 +87,20 @@ public class Receiver extends Person {
         this.CAP = CAP;
     }
 
+    public Donation getDonation() {
+        return donation;
+    }
+
+    public void setDonation(Donation donation) {
+        this.donation = donation;
+    }
+
     @Override
     public String calculateCode() {
         return getSurname()+getId();
     }
+
+
 
 
     public void receiveDonation(Donation donation) {
