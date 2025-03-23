@@ -1,5 +1,7 @@
 package it.corsojava.progettodonazioni.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.corsojava.progettodonazioni.enumerator.BloodType;
 import it.corsojava.progettodonazioni.enumerator.RH;
 import it.corsojava.progettodonazioni.enumerator.Status;
@@ -10,6 +12,7 @@ import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Entity
 @Table(name = "receivers")
+@JsonIgnoreProperties({"hibernteLazyInitializer", "handler"})
 public class Receiver extends Person {
 
     @Enumerated(EnumType.STRING)
@@ -22,6 +25,7 @@ public class Receiver extends Person {
 
     @OneToOne
     @JoinColumn(name= "donation_id")
+    @JsonIgnore
     Donation donation;
 
     @Column

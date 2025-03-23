@@ -59,8 +59,9 @@ public class DonationController {
     }
 
     @GetMapping("/getdonationBycompatible/{id}")
-    public void getdonationBycompatible (@PathVariable long id){
-        donationService.getdonationBycompatible(id);
+    public Donation getdonationBycompatible (@PathVariable long id){
+        return donationService.getdonationBycompatible(id);
+
     }
 
 }

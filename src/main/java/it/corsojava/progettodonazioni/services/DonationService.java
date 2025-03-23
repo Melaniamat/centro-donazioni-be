@@ -76,7 +76,7 @@ public class DonationService {
         }
     }
 
-    public void getdonationBycompatible(long idReceiver) {
+    public Donation getdonationBycompatible(long idReceiver) {
         Receiver receiver = receiverService.findReceiverById(idReceiver);
         RH recRh = receiver.getRh();
         BloodType recBloodType = receiver.getBloodType();
@@ -84,10 +84,10 @@ public class DonationService {
         List<Donation> newList = new ArrayList<>();
         try {
         for (Donation donation : allDonations) {
-            BloodType donBloodType = donation.getDonor().getBloodType();
-            RH donRh = donation.getDonor().getRh();
             if (donation.isAvailability() && donation.getStatus().equals(Status.COMPLETED)) {
-                if (recBloodType == donBloodType && recRh == donRh || recBloodType == donBloodType && donRh == RH.NEGATIVE) {
+                BloodType donBloodType = donation.getDonor().getBloodType();
+                RH donRh = donation.getDonor().getRh();
+                if ((recBloodType == donBloodType && recRh == donRh) || (recBloodType == donBloodType && donRh == RH.NEGATIVE)) {
                     newList.add(donation);
                 } else if (recBloodType == BloodType.AB && recRh == RH.POSITIVE ||
                         donBloodType == BloodType.O && donRh == RH.NEGATIVE) {
@@ -101,14 +101,17 @@ public class DonationService {
             } else {
                 System.out.println(NOT_AUTHORIZED);
             }
-            Donation donationCompatible = newList.getFirst();
+
+        } Donation donationCompatible = newList.getFirst();
             donationCompatible.setReceiver(receiver);
             donationCompatible.setStatus(Status.ASSIGNED);
+            receiver.setDonation(donationCompatible);
             donationCompatible.setAvailability(false);
             donationRepository.save(donationCompatible);
-        }
+            return donationCompatible;
     } catch (Exception e) {
             System.out.println(NOT_FOUND);
+            return null;
         }
     }
 
@@ -149,4 +152,9 @@ public class DonationService {
         donations.sort(Comparator.comparing(Donation :: getDate));
         return donations;
     }
-}
+
+
+
+        }
+
+

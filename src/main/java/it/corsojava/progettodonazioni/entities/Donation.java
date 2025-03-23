@@ -19,6 +19,7 @@ public class Donation {
 
     @OneToOne
     @JoinColumn(name = "receiver_id")
+    @JsonIgnore
     private Receiver receiver;
 
     @ManyToOne
