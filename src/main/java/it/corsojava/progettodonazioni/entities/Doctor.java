@@ -21,7 +21,7 @@ public class Doctor extends Person {
 
     @OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<Donation> donations;
+    private List<Donation> donationList;
 
     public Doctor(String name,String surname,String email,String username,String password,String phoneNumber) {
         super(name, surname, email, username, password);
@@ -47,12 +47,12 @@ public class Doctor extends Person {
         this.donationCenter = donationCenter;
     }
 
-    public List<Donation> getDonations() {
-        return donations;
+    public List<Donation> getDonationList() {
+        return donationList;
     }
 
-    public void setDonations(List<Donation> donations) {
-        this.donations = donations;
+    public void setDonationList(List<Donation> donationList) {
+        this.donationList = donationList;
     }
 
     @Override
