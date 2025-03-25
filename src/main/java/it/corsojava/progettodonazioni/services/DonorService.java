@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static it.corsojava.progettodonazioni.costants.Costant.NOT_AUTHORIZED;
 import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
@@ -26,13 +27,13 @@ public class DonorService {
     public Donor saveDonor(Donor donor) {
         int age = Period.between(donor.getBirthDate(), LocalDate.now()).getYears();
         double weight = donor.getWeight();
-        if (age >= 18 && age <= 65 && weight >= 50) {
+        if (age >= 18 && age <= 60 && weight > 50) {
             Donor donorSaved = donorRepository.save(donor);
             donorSaved.setCode(donorSaved.calculateCode());
             donorSaved.setBadge(donorSaved.calculateBadge());
             return donorRepository.save(donorSaved);
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(NOT_AUTHORIZED);
         }
     }
 

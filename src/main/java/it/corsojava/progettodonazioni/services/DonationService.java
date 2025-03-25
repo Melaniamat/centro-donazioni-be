@@ -50,21 +50,19 @@ public class DonationService {
         donation.setStatus(Status.SCHEDULED);
         donation.setDate(LocalDate.now());
         Donor donor = donorService.findDonorById(request.getDonorId());
-
+        DonationCenter donationCenter = donationCenterService.findDonationCenterById(request.getDonationCenterId());
         if ((donor.getSex().equals("M") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
                 (donor.getSex().equals("F") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
             donation.setStatus(Status.REFUSED);
-            return donationRepository.save(donation);
         } else {
             donation.setDonor(donorService.findDonorById(request.getDonorId()));
             donation.setDoctor(doctorService.findDoctorById(request.getDoctorId()));
             donation.setDonationCenter(donationCenterService.findDonationCenterById(request.getDonationCenterId()));
+            int totalDonations = donationCenter.getTotalDonations();
+            totalDonations++;
+            donationCenter.setTotalDonations(totalDonations);
+            donationCenterService.saveDonationCenter(donationCenter);
         }
-        DonationCenter donationCenter = donationCenterService.findDonationCenterById(request.getDonationCenterId());
-        int totalDonations = donationCenter.getTotalDonations();
-        totalDonations++;
-        donationCenter.setTotalDonations(totalDonations);
-        donationCenterService.saveDonationCenter(donationCenter);
         return donationRepository.save(donation);
     }
 
@@ -119,7 +117,7 @@ public class DonationService {
         Employee employee = employeeService.findEmployeeById(request.getEmployeeId());
         Donation donation = donationRepository.getById(request.getDonationId());
         if (employee.getRole().equals(Role.BASE) || donation.getStatus().equals(Status.REFUSED)) {
-            return donation;
+            throw new IllegalArgumentException(NOT_AUTHORIZED);
         } else {
             donation.setStatus(Status.COMPLETED);
             donation.setAvailability(true);
@@ -153,8 +151,6 @@ public class DonationService {
         return donations;
     }
 
-
-
-        }
+}
 
 

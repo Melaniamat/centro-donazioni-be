@@ -49,7 +49,15 @@ public class DonationCenterService {
         donationCenterRepository.delete(donationCenterToDelete);
     }
 
-    public List<DonationCenter> findCentersAlphabetical() {
+    public List<DonationCenter> findDonationCenterListByLocation(String location) {
+        return donationCenterRepository.findListByLocation(location);
+    }
+
+    public List<DonationCenter> findDonationCenterListByRegion(String region) {
+        return donationCenterRepository.findListByRegion(region);
+    }
+
+    public List<DonationCenter> findDonationCenterListAlphabetical() {
         List<DonationCenter> donationCenters = donationCenterRepository.findAll();
         donationCenters.sort(Comparator.comparing(DonationCenter :: getName));
         return donationCenters;

@@ -188,25 +188,26 @@ public class Donor extends Person {
     }
 
     public Badge calculateBadge() {
-        if (Period.between(this.birthdate, LocalDate.now()).getYears() > 65 && this.numberOfDonations >= 120) {
+        int yearsOfSubscription = Period.between(this.subscriptionDate,LocalDate.now()).getYears();
+        if ((Period.between(this.birthdate, LocalDate.now()).getYears() == 60 && this.numberOfDonations >= 120)) {
             this.setBadge(Badge.DIAMOND);
             this.setAbilitated(false);
-        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 40 && this.numberOfDonations >= 80
+        } else if (yearsOfSubscription >= 40 && this.numberOfDonations >= 80
                 || this.numberOfDonations >= 100) {
             this.setBadge(Badge.EMERALD);
-        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 30 && this.numberOfDonations >= 60
+        } else if (yearsOfSubscription >= 30 && this.numberOfDonations >= 60
                 || this.numberOfDonations >= 75) {
             this.setBadge(Badge.RUBY);
-        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 20 && this.numberOfDonations >= 40
+        } else if (yearsOfSubscription >= 20 && this.numberOfDonations >= 40
                 || this.numberOfDonations >= 50) {
             this.setBadge(Badge.PLATINUM);
-        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 10 && this.numberOfDonations >= 24
+        } else if (yearsOfSubscription >= 10 && this.numberOfDonations >= 24
                 || this.numberOfDonations >= 36) {
             this.setBadge(Badge.GOLD);
-        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 5 && this.numberOfDonations >= 12
+        } else if (yearsOfSubscription >= 5 && this.numberOfDonations >= 12
                 || this.numberOfDonations >= 16) {
             this.setBadge(Badge.SILVER);
-        } else if (Period.between(this.subscriptionDate, LocalDate.now()).getYears() >= 3 && this.numberOfDonations >= 6
+        } else if (yearsOfSubscription >= 3 && this.numberOfDonations >= 6
                 || this.numberOfDonations >= 8) {
             this.setBadge(Badge.COPPER);
         } else {

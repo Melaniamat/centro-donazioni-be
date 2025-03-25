@@ -15,17 +15,27 @@ public class DonationCenterController {
     DonationCenterService donationCenterService;
 
     @PostMapping("/save")
-    public DonationCenter saveCenter(@RequestBody DonationCenter donationCenter) {
+    public DonationCenter saveDonationCenter(@RequestBody DonationCenter donationCenter) {
         return donationCenterService.saveDonationCenter(donationCenter);
     }
 
     @GetMapping("/getById/{id}")
-    public DonationCenter findCenterById(@PathVariable long id) {
+    public DonationCenter findDonationCenterById(@PathVariable long id) {
         return donationCenterService.findDonationCenterById(id);
     }
 
+    @GetMapping("/getListByLocation/{location}")
+    public List<DonationCenter> findDonationCenterListByLocation(@PathVariable String location) {
+        return donationCenterService.findDonationCenterListByLocation(location);
+    }
+
+    @GetMapping("/getListByRegion/{region}")
+    public List<DonationCenter> findDonationCenterListByRegion(@PathVariable String region) {
+        return donationCenterService.findDonationCenterListByRegion(region);
+    }
+
     @PutMapping("/update/{id}")
-    public DonationCenter updateCenter(@PathVariable long id, @RequestBody DonationCenter donationCenter) {
+    public DonationCenter updateDonationCenter(@PathVariable long id, @RequestBody DonationCenter donationCenter) {
         return donationCenterService.updateDonationCenter(id,donationCenter);
     }
 
@@ -36,7 +46,7 @@ public class DonationCenterController {
 
     @GetMapping("/getAllAlphabetical")
     public List<DonationCenter> findDonationCenters() {
-        return donationCenterService.findCentersAlphabetical();
+        return donationCenterService.findDonationCenterListAlphabetical();
     }
 
 }
