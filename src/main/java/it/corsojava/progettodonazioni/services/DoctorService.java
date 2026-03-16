@@ -23,7 +23,7 @@ public class DoctorService {
     DonationCenterRepository donationCenterRepository;
 
     public Doctor saveDoctor(long id, Doctor doctor) {
-        DonationCenter donationCenter = donationCenterRepository.getById(id);
+        DonationCenter donationCenter = donationCenterRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(NOT_FOUND));
         Doctor doctorSaved = doctorRepository.save(doctor);
         doctorSaved.setCode(doctorSaved.calculateCode());
         doctorSaved.setDonationCenter(donationCenter);
@@ -32,7 +32,7 @@ public class DoctorService {
 
     public Doctor findDoctorById(long id) {
         if (doctorRepository.existsById(id)) {
-            return doctorRepository.getById(id);
+            return doctorRepository.findById(id).get();
         } else {
             throw new EntityNotFoundException(NOT_FOUND);
         }
@@ -40,7 +40,7 @@ public class DoctorService {
 
     public Doctor updateDoctor(long id, Doctor doctor) {
         if (doctorRepository.existsById(id)) {
-            Doctor doctorToUpdate = doctorRepository.getById(id);
+            Doctor doctorToUpdate = doctorRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(NOT_FOUND));;
             if (null != doctor.getEmail()) {
                 doctorToUpdate.setEmail(doctor.getEmail());
             }

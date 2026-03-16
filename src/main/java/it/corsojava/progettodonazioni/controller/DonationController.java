@@ -1,11 +1,9 @@
 package it.corsojava.progettodonazioni.controller;
 
 import it.corsojava.progettodonazioni.entities.Donation;
-import it.corsojava.progettodonazioni.entities.Receiver;
 import it.corsojava.progettodonazioni.request.DonationSaveRequest;
 import it.corsojava.progettodonazioni.request.DonationUpdateRequest;
 import it.corsojava.progettodonazioni.services.DonationService;
-import it.corsojava.progettodonazioni.services.ReceiverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,9 +56,9 @@ public class DonationController {
         donationService.deleteDonation(id);
     }
 
-    @GetMapping("/getdonationBycompatible/{id}")
+    @GetMapping("/getDonationByCompatible/{id}")
     public Donation getdonationBycompatible (@PathVariable long id){
-        return donationService.getdonationBycompatible(id);
+        return donationService.getDonationByCompatible(id);
 
     }
 

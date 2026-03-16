@@ -74,7 +74,7 @@ public class DonationService {
         }
     }
 
-    public Donation getdonationBycompatible(long idReceiver) {
+    public Donation getDonationByCompatible(long idReceiver) {
         Receiver receiver = receiverService.findReceiverById(idReceiver);
         RH recRh = receiver.getRh();
         BloodType recBloodType = receiver.getBloodType();
