@@ -3,7 +3,11 @@ package it.corsojava.progettodonazioni.entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.corsojava.progettodonazioni.enumerator.Role;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "employees")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -19,14 +23,6 @@ public class Employee extends Person {
     }
 
     public Employee() {
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     @Override

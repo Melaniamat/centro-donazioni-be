@@ -2,20 +2,23 @@ package it.corsojava.progettodonazioni.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import it.corsojava.progettodonazioni.common.BaseEntity;
 import it.corsojava.progettodonazioni.enumerator.Status;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "donations")
+@Getter
+@Setter
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Donation {
+public class Donation extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+
 
     @OneToOne
     @JoinColumn(name = "receiver_id")
@@ -42,7 +45,7 @@ public class Donation {
     private Status status;
 
     @Column
-    private boolean availability;
+    private  boolean availability;
 
     public Donation(Doctor doctor, DonationCenter donationCenter, Donor donor, LocalDate date, Status status) {
         this.doctor = doctor;
@@ -52,71 +55,10 @@ public class Donation {
         this.status = status;
     }
 
+
+
     public Donation() {
     }
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
-
-    public DonationCenter getDonationCenter() {
-        return donationCenter;
-    }
-
-    public void setDonationCenter(DonationCenter donationCenter) {
-        this.donationCenter = donationCenter;
-    }
-
-    public Donor getDonor() {
-        return donor;
-    }
-
-    public void setDonor(Donor donor) {
-        this.donor = donor;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public boolean isAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
-    }
-
-    public Receiver getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(Receiver receiver) {
-        this.receiver = receiver;
-    }
 }
-

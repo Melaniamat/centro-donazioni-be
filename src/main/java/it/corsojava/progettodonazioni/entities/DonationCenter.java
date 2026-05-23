@@ -2,18 +2,20 @@ package it.corsojava.progettodonazioni.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import it.corsojava.progettodonazioni.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Setter
+@Getter
 @Entity
 @Table (name = "donation_centers")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class DonationCenter {
+public class DonationCenter extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
     @Column
     private String name;
@@ -25,6 +27,9 @@ public class DonationCenter {
     private String location;
 
     @Column
+    private String CAP;
+
+    @Column
     private String region;
 
     @Column
@@ -34,93 +39,23 @@ public class DonationCenter {
     private int totalDonations;
 
     @OneToMany(mappedBy = "donationCenter", fetch = FetchType.EAGER)
-    private List<Doctor> doctorList;
+    private List<Doctor> doctors;
 
     @OneToMany(mappedBy = "donationCenter", fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<Donation> donationList;
+    private List<Donation> donations;
 
-    public DonationCenter(String name,String address,String phoneNumber,String region, String location) {
+    public DonationCenter(String name,String address,String phoneNumber,String CAP,String region, String location) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.region = region;
+        this.CAP = CAP;
+        this.region=region;
         this.location = location;
     }
 
-    public DonationCenter() {
-    }
+    public DonationCenter() {}
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public List<Doctor> getDoctorList() {
-        return doctorList;
-    }
-
-    public void setDoctorList(List<Doctor> doctorList) {
-        this.doctorList = doctorList;
-    }
-
-    public List<Donation> getDonationList() {
-        return donationList;
-    }
-
-    public void setDonationList(List<Donation> donationList) {
-        this.donationList = donationList;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public int getTotalDonations() {
-        return totalDonations;
-    }
-
-    public void setTotalDonations(int totalDonations) {
-        this.totalDonations = totalDonations;
-    }
 
 }

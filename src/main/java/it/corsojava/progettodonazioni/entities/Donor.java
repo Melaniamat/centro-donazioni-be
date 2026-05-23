@@ -6,11 +6,15 @@ import it.corsojava.progettodonazioni.enumerator.Badge;
 import it.corsojava.progettodonazioni.enumerator.BloodType;
 import it.corsojava.progettodonazioni.enumerator.RH;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
+@Setter
+@Getter
 @Entity
 @Table
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -31,6 +35,9 @@ public class Donor extends Person {
 
     @Column
     private String location;
+
+    @Column
+    private String CAP;
 
     @Column
     private LocalDate lastDonationDate;
@@ -62,7 +69,7 @@ public class Donor extends Person {
 
     public Donor(BloodType bloodType, String name, String surname, String email, String username, String password,
                  String sex, LocalDate birthdate, LocalDate lastDonationDate, boolean abilitated, int numberOfDonations,
-                 double weight, RH rh, String address, String location) {
+                 double weight, RH rh, String address, String location,String CAP) {
         super(name, surname, email, username, password);
         this.bloodType = bloodType;
         this.sex = sex;
@@ -70,121 +77,27 @@ public class Donor extends Person {
         this.lastDonationDate = lastDonationDate;
         this.abilitated = abilitated;
         this.numberOfDonations = numberOfDonations;
+        this.badge = badge;
         this.weight = weight;
         this.rh=rh;
         this.address=address;
+        this.CAP=CAP;
         this.location=location;
+
     }
+
 
     public Donor() {
     }
 
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public BloodType getBloodType() {
-        return bloodType;
-    }
-
-    public void setBloodType(BloodType bloodType) {
-        this.bloodType = bloodType;
-    }
 
     public LocalDate getBirthDate() {
         return birthdate;
     }
 
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public LocalDate getLastDonationDate() {
-        return lastDonationDate;
-    }
-
-    public void setLastDonationDate(LocalDate lastDonationDate) {
-        this.lastDonationDate = lastDonationDate;
-    }
-
-    public boolean isAbilitated() {
-        return abilitated;
-    }
-
-    public void setAbilitated(boolean abilitated) {
-        this.abilitated = abilitated;
-    }
-
-    public List<Donation> getDonationList() {
-        return donationList;
-    }
-
-    public void setDonationList(List<Donation> donationList) {
-        this.donationList = donationList;
-    }
-
-    public int getNumberOfDonations() {
-        return numberOfDonations;
-    }
-
-    public void setNumberOfDonations(int numberOfDonations) {
-        this.numberOfDonations = numberOfDonations;
-    }
-
-    public Badge getBadge() {
-        return badge;
-    }
-
-    public void setBadge(Badge badge) {
-        this.badge = badge;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public LocalDate getSubscriptionDate() {
-        return subscriptionDate;
-    }
-
-    public void setSubscriptionDate(LocalDate subscriptionDate) {
-        this.subscriptionDate = subscriptionDate;
-    }
-
-    public LocalDate getBirthdate() {
-        return birthdate;
-    }
-
-    public RH getRh() {
-        return rh;
-    }
-
-    public void setRh(RH rh) {
-        this.rh = rh;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
+    @Override
+    public String calculateCode() {
+        return this.getSurname() + this.getId();
     }
 
     public Badge calculateBadge() {
@@ -216,10 +129,6 @@ public class Donor extends Person {
         return badge;
     }
 
-    @Override
-    public String calculateCode() {
-        return this.getSurname() + this.getId();
-    }
 
 }
 
