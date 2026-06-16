@@ -14,7 +14,7 @@ public interface DonationRepository extends BaseRepository<Donation> {
 
     List<Donation> findByDoctorId(long doctorId);
     List<Donation> findByDonorId(long donorId);
-    List<Donation> findByDonationCenterId(long donationCenterId);
+
 
 
 }

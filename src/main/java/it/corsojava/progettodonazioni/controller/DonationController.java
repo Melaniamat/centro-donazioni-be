@@ -1,9 +1,9 @@
 package it.corsojava.progettodonazioni.controller;
 
 import it.corsojava.progettodonazioni.entities.Donation;
-import it.corsojava.progettodonazioni.request.DonationSaveRequest;
-import it.corsojava.progettodonazioni.request.DonationUpdateRequest;
-import it.corsojava.progettodonazioni.services.DonationService;
+import it.corsojava.progettodonazioni.DTO.request.DonationSaveRequest;
+import it.corsojava.progettodonazioni.DTO.request.DonationUpdateRequest;
+import it.corsojava.progettodonazioni.services.impl.DonationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class DonationController {
 
     @Autowired
-    DonationService donationService;
+    DonationServiceImpl donationService;
 
     @PostMapping("/save")
     public Donation saveDonation(@RequestBody DonationSaveRequest request) {
@@ -41,10 +41,6 @@ public class DonationController {
         return donationService.findAllByIdDonor(id);
     }
 
-    @GetMapping("/getByIdDonationCenter/{id}")
-    public List<Donation> findAllByIdDonationCenter(@PathVariable long id) {
-        return donationService.findAllByIdDonationCenter(id);
-    }
 
     @PutMapping("/update")
     public Donation updateDonation(@RequestBody DonationUpdateRequest request) {

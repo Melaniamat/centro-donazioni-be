@@ -1,6 +1,7 @@
 package it.corsojava.progettodonazioni.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import it.corsojava.progettodonazioni.common.Person;
 import it.corsojava.progettodonazioni.enumerator.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import lombok.Setter;
 public class Employee extends Person {
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private Role role;
 
     public Employee(String name, String surname, String email, String username, String password, Role role) {

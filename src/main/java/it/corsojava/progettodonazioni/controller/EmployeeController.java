@@ -1,7 +1,7 @@
 package it.corsojava.progettodonazioni.controller;
 
 import it.corsojava.progettodonazioni.entities.Employee;
-import it.corsojava.progettodonazioni.services.EmployeeService;
+import it.corsojava.progettodonazioni.services.impl.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeService employeeService;
+    private EmployeeServiceImpl employeeService;
 
     @PostMapping("/save")
     public Employee saveEmployee(@RequestBody Employee employee) {

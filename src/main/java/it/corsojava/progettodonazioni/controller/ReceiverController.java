@@ -1,7 +1,7 @@
 package it.corsojava.progettodonazioni.controller;
 
 import it.corsojava.progettodonazioni.entities.Receiver;
-import it.corsojava.progettodonazioni.services.ReceiverService;
+import it.corsojava.progettodonazioni.services.impl.ReceiverServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class ReceiverController {
 
     @Autowired
-    ReceiverService receiverService;
+    ReceiverServiceImpl receiverService;
 
     @PostMapping("/save")
     public Receiver saveReceiver(@RequestBody Receiver receiver) {

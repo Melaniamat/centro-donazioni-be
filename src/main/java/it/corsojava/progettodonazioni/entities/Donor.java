@@ -2,6 +2,7 @@ package it.corsojava.progettodonazioni.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import it.corsojava.progettodonazioni.common.Person;
 import it.corsojava.progettodonazioni.enumerator.Badge;
 import it.corsojava.progettodonazioni.enumerator.BloodType;
 import it.corsojava.progettodonazioni.enumerator.RH;
@@ -16,33 +17,37 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table
+@Table(name = "donors")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Donor extends Person {
 
-    @Column
+    @Column(nullable = false)
     private String sex;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private BloodType bloodType;
 
-    @Column
+    @Enumerated(EnumType.STRING)
+    @Column (name = "RH",nullable = false)
+    private RH rh;
+
+    @Column(nullable = false)
     private LocalDate birthdate;
 
     @Column
     private String address;
 
-    @Column
+    @Column(nullable = false)
     private String location;
 
-    @Column
+    @Column(name = "CAP", nullable = false)
     private String CAP;
 
     @Column
     private LocalDate lastDonationDate;
 
-    @Column
+    @Column(nullable = false)
     private boolean abilitated;
 
     @Column
@@ -52,19 +57,17 @@ public class Donor extends Person {
     @Column
     private Badge badge;
 
-    @Column
+    @Column(nullable = false)
     private double weight;
 
-    @Column
+    @Column(nullable = false)
     private LocalDate subscriptionDate;
 
     @OneToMany(mappedBy = "donor", fetch = FetchType.EAGER)
     @JsonIgnore
     List<Donation> donationList;
 
-    @Enumerated(EnumType.STRING)
-    @Column (name = "RH")
-    private RH rh;
+
 
 
     public Donor(BloodType bloodType, String name, String surname, String email, String username, String password,
@@ -77,12 +80,12 @@ public class Donor extends Person {
         this.lastDonationDate = lastDonationDate;
         this.abilitated = abilitated;
         this.numberOfDonations = numberOfDonations;
-        this.badge = badge;
         this.weight = weight;
         this.rh=rh;
         this.address=address;
         this.CAP=CAP;
         this.location=location;
+
 
     }
 

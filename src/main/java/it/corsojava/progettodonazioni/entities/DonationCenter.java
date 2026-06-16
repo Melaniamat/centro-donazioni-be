@@ -17,33 +17,30 @@ import java.util.List;
 public class DonationCenter extends BaseEntity {
 
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String address;
 
-    @Column
+    @Column(nullable = false)
     private String location;
 
-    @Column
+    @Column(name = "CAP", nullable = false)
     private String CAP;
 
-    @Column
+    @Column(nullable = false)
     private String region;
 
-    @Column
+    @Column(nullable = false)
     private String phoneNumber;
 
     @Column(name = "total_donations")
     private int totalDonations;
 
-    @OneToMany(mappedBy = "donationCenter", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "donationCenter")
     private List<Doctor> doctors;
 
-    @OneToMany(mappedBy = "donationCenter", fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Donation> donations;
 
     public DonationCenter(String name,String address,String phoneNumber,String CAP,String region, String location) {
         this.name = name;

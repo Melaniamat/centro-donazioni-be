@@ -1,7 +1,7 @@
 package it.corsojava.progettodonazioni.controller;
 
 import it.corsojava.progettodonazioni.entities.Donor;
-import it.corsojava.progettodonazioni.services.DonorService;
+import it.corsojava.progettodonazioni.services.impl.DonorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class DonorController {
 
     @Autowired
-    DonorService donorService;
+    DonorServiceImpl donorService;
 
     @PostMapping("/save")
     public Donor saveDonor(@RequestBody Donor donor) {

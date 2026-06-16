@@ -2,15 +2,12 @@ package it.corsojava.progettodonazioni.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import it.corsojava.progettodonazioni.common.Person;
 import it.corsojava.progettodonazioni.enumerator.BloodType;
 import it.corsojava.progettodonazioni.enumerator.RH;
-import it.corsojava.progettodonazioni.enumerator.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import static it.corsojava.progettodonazioni.costants.Costant.NOT_AUTHORIZED;
-import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Setter
 @Getter
@@ -32,13 +29,16 @@ public class Receiver extends Person {
     @JsonIgnore
     Donation donation;
 
-    @Column
+    @Column(nullable = false)
     private String location;
-    @Column
+
+    @Column(nullable = false)
     private String region;
-    @Column
+
+    @Column(nullable = false)
     private String address;
-    @Column
+
+    @Column(name = "CAP", nullable = false)
     private String CAP;
 
 

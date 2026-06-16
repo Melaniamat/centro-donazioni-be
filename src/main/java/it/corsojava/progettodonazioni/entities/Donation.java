@@ -21,35 +21,33 @@ public class Donation extends BaseEntity {
 
 
     @OneToOne
-    @JoinColumn(name = "receiver_id")
+    @JoinColumn(name = "receiver_id",nullable = false)
     @JsonIgnore
     private Receiver receiver;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
+    @JoinColumn(name = "doctor_id",nullable = false)
     private Doctor doctor;
 
     @ManyToOne
-    @JoinColumn(name = "donation_center_id")
-    private DonationCenter donationCenter;
-
-    @ManyToOne
-    @JoinColumn(name = "donor_id")
+    @JoinColumn(name = "donor_id",nullable = false)
     private Donor donor;
 
-    @Column
+    @Column(name = "donation_center",nullable = false)
+    private String donationCenter;
+
+    @Column(nullable = false)
     private LocalDate date;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private Status status;
 
-    @Column
+    @Column(nullable = false)
     private  boolean availability;
 
     public Donation(Doctor doctor, DonationCenter donationCenter, Donor donor, LocalDate date, Status status) {
         this.doctor = doctor;
-        this.donationCenter = donationCenter;
         this.donor = donor;
         this.date = date;
         this.status = status;

@@ -2,6 +2,7 @@ package it.corsojava.progettodonazioni.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import it.corsojava.progettodonazioni.common.Person;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,15 +16,15 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Doctor extends Person {
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number",nullable = false)
     private String phoneNumber;
 
     @ManyToOne
-    @JoinColumn(name = "donation_center_id")
+    @JoinColumn(name = "donation_center_id",nullable = false)
     @JsonIgnore
     private DonationCenter donationCenter;
 
-    @OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "doctor")
     @JsonIgnore
     private List<Donation> donations;
 
