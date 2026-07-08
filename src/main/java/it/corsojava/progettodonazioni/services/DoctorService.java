@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface DoctorService extends BaseRestService<DoctorDTO, DoctorRequestDTO> {
     List<DoctorDTO> getDoctorsAlphabetical();
+    Doctor findDoctorById(long id);
 
      // TODO: void assignDonation(long id);
 }

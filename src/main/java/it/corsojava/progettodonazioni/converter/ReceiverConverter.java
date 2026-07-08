@@ -47,13 +47,14 @@ public class ReceiverConverter extends BaseConverter<Receiver, ReceiverDTO, Rece
             Donation donation = RepositoryUtils.findOrThrow(donationRepository, request.getDonationId(), Donation.class);
             entity.setDonation(donation);
         }
+        entity.setCode(entity.calculateCode());
         return entity;
     }
 
     @Override
-    public Receiver toEntity(ReceiverDTO dto) {
+    public Receiver copyToEntity(ReceiverRequestDTO dto,Receiver entity) {
         if (dto == null) return null;
-        Receiver entity = super.toEntity(dto);
+        super.copyToEntity(dto, entity);
 
         if (dto.getBloodType() != null) {
             entity.setBloodType(BloodType.valueOf(dto.getBloodType().toUpperCase()));

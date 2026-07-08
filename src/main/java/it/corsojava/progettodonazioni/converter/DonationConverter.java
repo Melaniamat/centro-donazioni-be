@@ -14,6 +14,9 @@ import it.corsojava.progettodonazioni.repositories.ReceiverRepository;
 import it.corsojava.progettodonazioni.utils.RepositoryUtils;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 @Component
 public class DonationConverter extends BaseConverter<Donation, DonationDTO, DonationRequestDTO> {
 
@@ -45,6 +48,7 @@ public class DonationConverter extends BaseConverter<Donation, DonationDTO, Dona
         if (entity.getDonor() != null) {
             dto.setDonorId(entity.getDonor().getId());
         }
+
         return dto;
     }
 
@@ -52,32 +56,45 @@ public class DonationConverter extends BaseConverter<Donation, DonationDTO, Dona
     public Donation requestToEntity(DonationRequestDTO request) {
         if (request == null) return null;
         Donation entity = super.requestToEntity(request);
-
-        if (request.getStatus() != null) {
-            entity.setStatus(Status.valueOf(request.getStatus().toUpperCase()));
-        }
-        if (request.getReceiverId() != null) {
-            Receiver receiver = RepositoryUtils.findOrThrow(receiverRepository, request.getReceiverId(), Receiver.class);
-            entity.setReceiver(receiver);
+        if (request.getDonorId() != null) {
+            Donor donor = RepositoryUtils.findOrThrow(donorRepository, request.getDonorId(), Donor.class);
+            entity.setDonor(donor);
+            if ((donor.getSex(). equals("M") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(), LocalDate.now())<3) ||
+                    (donor.getSex().equals("F") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
+                entity.setStatus(Status.REFUSED);
+            }
         }
         if (request.getDoctorId() != null) {
             Doctor doctor = RepositoryUtils.findOrThrow(doctorRepository, request.getDoctorId(), Doctor.class);
             entity.setDoctor(doctor);
         }
-        if (request.getDonorId() != null) {
-            Donor donor = RepositoryUtils.findOrThrow(donorRepository, request.getDonorId(), Donor.class);
-            entity.setDonor(donor);
+        if (request.getReceiverId() != null) {
+            Receiver receiver = RepositoryUtils.findOrThrow(receiverRepository, request.getReceiverId(), Receiver.class);
+            entity.setReceiver(receiver);
+        }
+
+        if (request.getStatus() != null) {
+            entity.setStatus(Status.valueOf(request.getStatus().toUpperCase()));
+        }
+        if (request.getDate()!= null){
+            entity.setDate(LocalDate.parse(request.getDate().trim()));
         }
         return entity;
     }
 
     @Override
-    public Donation toEntity(DonationDTO dto) {
+    public Donation copyToEntity(DonationRequestDTO dto,Donation entity) {
         if (dto == null) return null;
-        Donation entity = super.toEntity(dto);
+        super.copyToEntity(dto,entity);
+
+        if (dto.getDate()!= null){
+            entity.setDate(LocalDate.parse(dto.getDate().trim()));
+        }
 
         if (dto.getStatus() != null) {
             entity.setStatus(Status.valueOf(dto.getStatus().toUpperCase()));
+
+
         }
         if (dto.getReceiverId() != null) {
             Receiver receiver = RepositoryUtils.findOrThrow(receiverRepository, dto.getReceiverId(), Receiver.class);
@@ -86,10 +103,13 @@ public class DonationConverter extends BaseConverter<Donation, DonationDTO, Dona
         if (dto.getDoctorId() != null) {
             Doctor doctor = RepositoryUtils.findOrThrow(doctorRepository, dto.getDoctorId(), Doctor.class);
             entity.setDoctor(doctor);
+
         }
         if (dto.getDonorId() != null) {
+
             Donor donor = RepositoryUtils.findOrThrow(donorRepository, dto.getDonorId(), Donor.class);
             entity.setDonor(donor);
+
         }
         return entity;
     }

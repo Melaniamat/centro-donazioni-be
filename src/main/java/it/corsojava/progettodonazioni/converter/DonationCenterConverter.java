@@ -38,8 +38,8 @@ public class DonationCenterConverter extends BaseConverter<DonationCenter, Donat
     }
 
     @Override
-    public DonationCenter toEntity(DonationCenterDTO dto) {
+    public DonationCenter copyToEntity(DonationCenterRequestDTO dto,DonationCenter entity) {
         if (dto == null) return null;
-        return super.toEntity(dto);
+        return super.copyToEntity(dto,entity);
     }
 }

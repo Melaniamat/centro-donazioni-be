@@ -49,8 +49,8 @@ public class Donation extends BaseEntity {
     public Donation(Doctor doctor, DonationCenter donationCenter, Donor donor, LocalDate date, Status status) {
         this.doctor = doctor;
         this.donor = donor;
-        this.date = date;
-        this.status = status;
+        this.date = (date!= null) ? date : LocalDate.now();
+        this.status = (status != null) ? status : Status.SCHEDULED;
     }
 
 

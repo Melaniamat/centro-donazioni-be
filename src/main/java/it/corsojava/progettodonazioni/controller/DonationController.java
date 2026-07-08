@@ -1,61 +1,48 @@
 package it.corsojava.progettodonazioni.controller;
 
+import it.corsojava.progettodonazioni.DTO.request.DonationRequestDTO;
+import it.corsojava.progettodonazioni.DTO.response.DonationDTO;
+import it.corsojava.progettodonazioni.common.BaseGenericRestController;
 import it.corsojava.progettodonazioni.entities.Donation;
-import it.corsojava.progettodonazioni.DTO.request.DonationSaveRequest;
-import it.corsojava.progettodonazioni.DTO.request.DonationUpdateRequest;
+import it.corsojava.progettodonazioni.services.DonationService;
 import it.corsojava.progettodonazioni.services.impl.DonationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/donation")
-public class DonationController {
+public class DonationController extends BaseGenericRestController<DonationDTO, DonationRequestDTO, DonationService> {
 
-    @Autowired
-    DonationServiceImpl donationService;
 
-    @PostMapping("/save")
-    public Donation saveDonation(@RequestBody DonationSaveRequest request) {
-        return donationService.saveDonation(request);
+    public DonationController(DonationService service) {
+        super(service);
     }
 
-    @GetMapping("getById/{id}")
-    public Donation findDonationById(@PathVariable long id) {
-        return donationService.findDonationById(id);
+    @GetMapping("date")
+    public ResponseEntity<List<DonationDTO>> findDonationsByDate() {
+        return new ResponseEntity<>(getService().findAllByDate(), HttpStatus.OK);
     }
 
-    @GetMapping("getAllByDate")
-    public List<Donation> findDonations() {
-        return donationService.findAllByDate();
+    @GetMapping("doctorID/{id}")
+    public ResponseEntity<List<DonationDTO>> findAllByIdDoctor(@PathVariable long id) {
+        return new ResponseEntity<>(getService().findAllByIdDoctor(id), HttpStatus.OK);
     }
 
-    @GetMapping("/getByIdDoctor/{id}")
-    public List<Donation> findAllByIdDoctor(@PathVariable long id) {
-        return donationService.findAllByIdDoctor(id);
-    }
-
-    @GetMapping("/getByIdDonor/{id}")
-    public List<Donation> findAllByIdDonor(@PathVariable long id) {
-        return donationService.findAllByIdDonor(id);
+    @GetMapping("/donorId/{id}")
+    public ResponseEntity<List<DonationDTO>> findAllByDonorId(@PathVariable long id) {
+        return new ResponseEntity<>(getService().findAllByIdDonor(id), HttpStatus.OK);
     }
 
 
-    @PutMapping("/update")
-    public Donation updateDonation(@RequestBody DonationUpdateRequest request) {
-        return donationService.updateDonation(request);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public void deleteDonation(@PathVariable long id) {
-        donationService.deleteDonation(id);
-    }
-
-    @GetMapping("/getDonationByCompatible/{id}")
-    public Donation getdonationBycompatible (@PathVariable long id){
-        return donationService.getDonationByCompatible(id);
+    @GetMapping("/compatible/{id}")
+    public ResponseEntity<DonationDTO> getDonationByCompatible(@PathVariable long id){
+        return new ResponseEntity<> (getService().getDonationByCompatible(id), HttpStatus.OK);
 
     }
 
 }
+

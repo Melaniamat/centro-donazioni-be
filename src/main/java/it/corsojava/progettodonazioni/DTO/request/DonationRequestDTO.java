@@ -23,8 +23,8 @@ public class DonationRequestDTO extends BaseRequestDTO {
     @NotNull(message = MANDATORY_FIELD)
     private Long donorId;
 
-    @NotBlank(message = MANDATORY_FIELD)
-    private String donationCenter;
+    @NotNull(message = MANDATORY_FIELD)
+    private Long employeeId;
 
     @NotBlank(message = MANDATORY_FIELD)
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = INVALID_DATE_FORMAT)
@@ -33,6 +33,6 @@ public class DonationRequestDTO extends BaseRequestDTO {
     @NotBlank(message = MANDATORY_FIELD)
     private String status;
 
-    @NotNull(message = MANDATORY_FIELD)
-    private Boolean availability;
+
+
 }

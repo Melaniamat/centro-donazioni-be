@@ -1,5 +1,6 @@
 package it.corsojava.progettodonazioni.repositories;
 
+import it.corsojava.progettodonazioni.DTO.response.DonationDTO;
 import it.corsojava.progettodonazioni.common.BaseRepository;
 import it.corsojava.progettodonazioni.entities.Donation;
 import it.corsojava.progettodonazioni.entities.DonationCenter;

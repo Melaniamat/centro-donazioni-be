@@ -26,9 +26,4 @@ public class Employee extends Person {
     public Employee() {
     }
 
-    @Override
-    public String calculateCode() {
-        return getSurname()+getId();
-    }
-
 }

@@ -56,15 +56,7 @@ public class Receiver extends Person {
     public Receiver() {
     }
 
-    @Override
-    public String calculateCode() {
-        return getSurname()+getId();
-    }
 
-    public void receiveDonation(Donation donation) {
-
-
-    }
 
 }
 

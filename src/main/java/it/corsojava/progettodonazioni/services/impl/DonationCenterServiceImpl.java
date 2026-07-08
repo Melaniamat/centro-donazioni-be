@@ -7,14 +7,11 @@ import it.corsojava.progettodonazioni.common.BaseGenericRestService;
 import it.corsojava.progettodonazioni.entities.DonationCenter;
 import it.corsojava.progettodonazioni.repositories.DonationCenterRepository;
 import it.corsojava.progettodonazioni.services.DonationCenterService;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.corsojava.progettodonazioni.utils.RepositoryUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-
-import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
 public class DonationCenterServiceImpl extends BaseGenericRestService<DonationCenter, DonationCenterDTO, DonationCenterRequestDTO,DonationCenterRepository>
@@ -25,17 +22,34 @@ public class DonationCenterServiceImpl extends BaseGenericRestService<DonationCe
         super(repository, converter, DonationCenter.class);
     }
 
-    public List<DonationCenter> findDonationCenterListByLocation(String location) {
-        return getRepository().findListByLocation(location);
+    @Override
+    public List<DonationCenterDTO> findDonationCenterListByLocation(String location) {
+        return getConverter().toDtoList(getRepository().findListByLocation(location));
     }
 
-    public List<DonationCenter> findDonationCenterListByRegion(String region) {
-        return getRepository().findListByRegion(region);
+    public List<DonationCenterDTO> findDonationCenterListByRegion(String region) {
+        return getConverter().toDtoList(getRepository().findListByRegion(region)) ;
     }
 
-    public List<DonationCenter> findDonationCenterListAlphabetical() {
+    public List<DonationCenterDTO> findDonationCenterListAlphabetical() {
         List<DonationCenter> donationCenters = getRepository().findAll();
         donationCenters.sort(Comparator.comparing(DonationCenter :: getName));
-        return donationCenters;
+        return getConverter().toDtoList(donationCenters);
+    }
+
+    @Override
+    public DonationCenter findDonationCenterById(long donationCenterId) {
+        return RepositoryUtils.findOrThrow(getRepository(),donationCenterId,this.getEntityClass());
+    }
+
+    @Override
+    public void saveDonationCenter(DonationCenter donationCenter) {
+        getRepository().save(donationCenter);
+    }
+
+    @Override
+    public void addDonation(DonationCenter donationCenter) {
+        donationCenter.setTotalDonations(donationCenter.getTotalDonations()+1);
+        getRepository().saveAndFlush(donationCenter);
     }
 }

@@ -98,11 +98,6 @@ public class Donor extends Person {
         return birthdate;
     }
 
-    @Override
-    public String calculateCode() {
-        return this.getSurname() + this.getId();
-    }
-
     public Badge calculateBadge() {
         int yearsOfSubscription = Period.between(this.subscriptionDate,LocalDate.now()).getYears();
         if ((Period.between(this.birthdate, LocalDate.now()).getYears() == 60 && this.numberOfDonations >= 120)) {

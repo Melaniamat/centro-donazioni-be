@@ -36,9 +36,4 @@ public class Doctor extends Person {
     public Doctor() {
     }
 
-    @Override
-    public String calculateCode() {
-        return getSurname()+getId();
-    }
-
 }

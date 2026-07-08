@@ -4,7 +4,6 @@ import it.corsojava.progettodonazioni.utils.RepositoryUtils;
 import jakarta.annotation.Nonnull;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Collection;
 
 import static it.corsojava.progettodonazioni.costants.Costant.ENTITY_DELETED;
@@ -51,8 +50,8 @@ public abstract class BaseGenericRestService<E extends BaseEntity, D extends Bas
 
     @Override
     public D put(REQ dto, @Nonnull Long id) {
-        RepositoryUtils.findOrThrow(repository, id, entityClass);
-        E entity = converter.requestToEntity(dto);
+        E entity = RepositoryUtils.findOrThrow(repository, id, entityClass);
+        converter.copyToEntity(dto,entity);
         entity.setId(id);
         repository.save(entity);
         log.info(entity.getClass().getSimpleName() + " Updated successfully");

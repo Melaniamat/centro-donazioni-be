@@ -53,14 +53,14 @@ public class DoctorConverter extends BaseConverter<Doctor, DoctorDTO, DoctorRequ
     }
 
     @Override
-    public Doctor toEntity(DoctorDTO dto) {
+    public Doctor copyToEntity(DoctorRequestDTO dto,Doctor entity) {
         if (dto == null) return null;
-        Doctor entity = super.toEntity(dto);
+        Doctor updatedEntity = super.copyToEntity(dto,entity);
 
         if (dto.getDonationCenterId() != null) {
             DonationCenter center = RepositoryUtils.findOrThrow(donationCenterRepository, dto.getDonationCenterId(), DonationCenter.class);
-            entity.setDonationCenter(center);
+            updatedEntity.setDonationCenter(center);
         }
-        return entity;
+        return updatedEntity;
     }
 }

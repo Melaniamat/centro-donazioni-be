@@ -1,43 +1,34 @@
 package it.corsojava.progettodonazioni.controller;
 
+import it.corsojava.progettodonazioni.DTO.request.ReceiverRequestDTO;
+import it.corsojava.progettodonazioni.DTO.response.EmployeeDTO;
+import it.corsojava.progettodonazioni.DTO.response.ReceiverDTO;
+import it.corsojava.progettodonazioni.common.BaseGenericRestController;
 import it.corsojava.progettodonazioni.entities.Receiver;
+import it.corsojava.progettodonazioni.services.ReceiverService;
 import it.corsojava.progettodonazioni.services.impl.ReceiverServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/receiver")
-public class ReceiverController {
+public class  ReceiverController extends BaseGenericRestController<ReceiverDTO, ReceiverRequestDTO, ReceiverService> {
 
-    @Autowired
-    ReceiverServiceImpl receiverService;
 
-    @PostMapping("/save")
-    public Receiver saveReceiver(@RequestBody Receiver receiver) {
-        return receiverService.saveReceiver(receiver);
+    public ReceiverController(ReceiverService service) {
+        super(service);
     }
 
-    @GetMapping("/getById/{id}")
-    public Receiver findReceiverById(@PathVariable long id) {
-        return receiverService.findReceiverById(id);
+    @GetMapping("/alphabetical")
+    public ResponseEntity<List<ReceiverDTO>> getEmployees() {
+        return new ResponseEntity<>(getService().findReceiversAlphabetical(), HttpStatus.OK);
     }
 
-    @GetMapping("/getAllAlphabetical")
-    public List<Receiver> findReceivers() {
-        return receiverService.findReceiversAlphabetical();
-    }
 
-    @PutMapping("/update/{id}")
-    public Receiver updateReceiver(@PathVariable long id, @RequestBody Receiver receiver) {
-        return receiverService.updateReceiver(id,receiver);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public void deleteReceiver(@PathVariable long id) {
-        receiverService.deleteReceiver(id);
-    }
 
 
 

@@ -40,6 +40,6 @@ public abstract class Person extends BaseEntity {
     }
 
 
-    public abstract String calculateCode();
+    public  String calculateCode(){return getSurname()+getId();};
 
 }

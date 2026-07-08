@@ -30,16 +30,18 @@ public class EmployeeConverter extends BaseConverter<Employee, EmployeeDTO, Empl
         if (request == null) return null;
         Employee entity = super.requestToEntity(request);
 
+
         if (request.getRole() != null) {
             entity.setRole(Role.valueOf(request.getRole().toUpperCase()));
         }
+        entity.setCode(entity.calculateCode());
         return entity;
     }
 
     @Override
-    public Employee toEntity(EmployeeDTO dto) {
+    public Employee copyToEntity(EmployeeRequestDTO dto,Employee entity) {
         if (dto == null) return null;
-        Employee entity = super.toEntity(dto);
+        super.copyToEntity(dto, entity);
 
         if (dto.getRole() != null) {
             entity.setRole(Role.valueOf(dto.getRole().toUpperCase()));

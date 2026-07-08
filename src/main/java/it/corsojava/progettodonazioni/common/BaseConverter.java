@@ -53,13 +53,12 @@ public abstract class BaseConverter<E extends BaseEntity, D extends BaseDTO, R e
     /**
      * Converts an outbound DTO back into a baseline data persistence Entity.
      *
-     * @param dto The source outbound payload configuration
+     * @param request The source outbound payload configuration
      * @return Remapped target infrastructure Entity configuration
      */
-    public E toEntity(D dto) {
-        if (dto == null) return null;
-        E entity = createEntity();
-        BeanUtils.copyProperties(dto, entity);
+    public E copyToEntity(R request, E entity) {
+        if (request == null) return null;
+        BeanUtils.copyProperties(request, entity);
         return entity;
     }
 
@@ -87,14 +86,5 @@ public abstract class BaseConverter<E extends BaseEntity, D extends BaseDTO, R e
         return entities.stream().map(this::toDto).collect(Collectors.toList());
     }
 
-    /**
-     * Batch converts a collections stream of view representations back to entity contexts.
-     *
-     * @param dtos Source model structures sequence
-     * @return Target framework instances list
-     */
-    public List<E> toEntityList(List<D> dtos) {
-        if (dtos == null) return null;
-        return dtos.stream().map(this::toEntity).collect(Collectors.toList());
-    }
+
 }

@@ -1,28 +1,22 @@
 package it.corsojava.progettodonazioni.services.impl;
 
-import it.corsojava.progettodonazioni.DTO.request.DonationCenterRequestDTO;
-import it.corsojava.progettodonazioni.DTO.response.DonationCenterDTO;
+import it.corsojava.progettodonazioni.DTO.request.*;
+import it.corsojava.progettodonazioni.DTO.response.DonationDTO;
 import it.corsojava.progettodonazioni.common.BaseConverter;
 import it.corsojava.progettodonazioni.common.BaseGenericRestService;
-import it.corsojava.progettodonazioni.common.BaseRepository;
 import it.corsojava.progettodonazioni.entities.*;
 import it.corsojava.progettodonazioni.enumerator.Role;
 import it.corsojava.progettodonazioni.enumerator.Status;
-import it.corsojava.progettodonazioni.entities.Donation;
-import it.corsojava.progettodonazioni.entities.Donor;
-import it.corsojava.progettodonazioni.entities.Employee;
-import it.corsojava.progettodonazioni.entities.Receiver;
 import it.corsojava.progettodonazioni.enumerator.*;
 import it.corsojava.progettodonazioni.repositories.*;
-import it.corsojava.progettodonazioni.DTO.request.DonationSaveRequest;
-import it.corsojava.progettodonazioni.DTO.request.DonationUpdateRequest;
 import it.corsojava.progettodonazioni.services.DonationCenterService;
+import it.corsojava.progettodonazioni.services.DonationService;
+import it.corsojava.progettodonazioni.services.DonorService;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,19 +25,11 @@ import static it.corsojava.progettodonazioni.costants.Costant.NOT_AUTHORIZED;
 import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
-public class DonationServiceImpl   {
+public class DonationServiceImpl extends BaseGenericRestService<Donation, DonationDTO, DonationRequestDTO,DonationRepository> implements DonationService  {
 
-    @Autowired
-    DonationRepository donationRepository;
-
-    @Autowired
-    DonorServiceImpl donorService;
 
     @Autowired
     DoctorServiceImpl doctorService;
-
-    @Autowired
-    DonationCenterServiceImpl donationCenterService;
 
     @Autowired
     EmployeeServiceImpl employeeService;
@@ -51,110 +37,129 @@ public class DonationServiceImpl   {
     @Autowired
     ReceiverServiceImpl receiverService;
 
+    @Autowired
+    DonationCenterService donationCenterService;
 
+    @Autowired
+    DonorService donorService;
 
-    public Donation saveDonation(DonationSaveRequest request) {
-        Donation donation = new Donation();
-        donation.setStatus(Status.SCHEDULED);
-        donation.setDate(LocalDate.now());
-        Donor donor = donorService.findDonorById(request.getDonorId());
-        DonationCenter donationCenter = donationCenterService.findDonationCenterById(request.getDonationCenterId());
-        if ((donor.getSex().equals("M") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<3) ||
-                (donor.getSex().equals("F") && ChronoUnit.MONTHS.between(donor.getLastDonationDate(),LocalDate.now())<6)) {
-            donation.setStatus(Status.REFUSED);
-        } else {
-            donation.setDonor(donorService.findDonorById(request.getDonorId()));
-            donation.setDoctor(doctorService.findDoctorById(request.getDoctorId()));
-            int totalDonations = donationCenter.getTotalDonations();
-            totalDonations++;
-            donationCenter.setTotalDonations(totalDonations);
-            donationCenterService.saveDonationCenter(donationCenter);
-        }
-        return donationRepository.save(donation);
+    protected DonationServiceImpl(DonationRepository repository, BaseConverter<Donation, DonationDTO, DonationRequestDTO> converter) {
+        super(repository, converter, Donation.class);
     }
 
-    public Donation findDonationById(long id) {
-        if (donationRepository.existsById(id)) {
-            return donationRepository.getById(id);
-        } else {
-            throw new EntityNotFoundException(NOT_FOUND);
-        }
+
+    @Override
+    public DonationDTO post(DonationRequestDTO dto) {
+        return super.post(dto);
     }
 
-    public Donation getDonationByCompatible(long idReceiver) {
+
+    @Override
+    public DonationDTO getDonationByCompatible(long idReceiver) {
         Receiver receiver = receiverService.findReceiverById(idReceiver);
         RH recRh = receiver.getRh();
         BloodType recBloodType = receiver.getBloodType();
-        List<Donation> allDonations = donationRepository.findAll();
-        List<Donation> newList = new ArrayList<>();
+        List<Donation> allDonations = getRepository().findAll();
+
+        // Creiamo tre liste separate per gestire le priorità reali in ordine medico
+        List<Donation> stessaSacca = new ArrayList<>();
+        List<Donation> compatibiliStandard = new ArrayList<>();
+        List<Donation> ultimaSpiaggiaGruppoO = new ArrayList<>();
+
         try {
-        for (Donation donation : allDonations) {
-            if (donation.isAvailability() && donation.getStatus().equals(Status.COMPLETED)) {
-                BloodType donBloodType = donation.getDonor().getBloodType();
-                RH donRh = donation.getDonor().getRh();
-                if ((recBloodType == donBloodType && recRh == donRh) || (recBloodType == donBloodType && donRh == RH.NEGATIVE)) {
-                    newList.add(donation);
-                } else if (recBloodType == BloodType.AB && recRh == RH.POSITIVE ||
-                        donBloodType == BloodType.O && donRh == RH.NEGATIVE) {
-                    newList.add(donation);
-                } else if (recBloodType == BloodType.AB && donRh == RH.NEGATIVE ||
-                        donBloodType == BloodType.O && recRh == RH.POSITIVE) {
-                    if (recRh == donRh) {
-                        newList.add(donation);
+            for (Donation donation : allDonations) {
+                if (donation.isAvailability() && donation.getStatus().equals(Status.COMPLETED)) {
+                    BloodType donBloodType = donation.getDonor().getBloodType();
+                    RH donRh = donation.getDonor().getRh();
+
+                    // PRIORITÀ 1: Identici
+                    if (recBloodType == donBloodType && recRh == donRh) {
+                        stessaSacca.add(donation);
+                    }
+                    // PRIORITÀ 2: Compatibili standard (es. AB riceve da A o B, oppure A+ riceve da A-)
+                    else if ((recBloodType == donBloodType && donRh == RH.NEGATIVE) ||
+                            (recBloodType == BloodType.AB && donRh == RH.NEGATIVE) ||
+                            (recBloodType == BloodType.AB && recRh == RH.POSITIVE)) {
+                        compatibiliStandard.add(donation);
+                    }
+                    // PRIORITÀ 3: Donatore Universale O
+                    else if (donBloodType == BloodType.O) {
+                        if (donRh == RH.NEGATIVE || recRh == RH.POSITIVE) {
+                            ultimaSpiaggiaGruppoO.add(donation);
+                        }
                     }
                 }
-            } else {
-                System.out.println(NOT_AUTHORIZED);
             }
 
-        } Donation donationCompatible = newList.getFirst();
+            List<Donation> newList = new ArrayList<>();
+            newList.addAll(stessaSacca);
+            newList.addAll(compatibiliStandard);
+            newList.addAll(ultimaSpiaggiaGruppoO);
+
+            if (newList.isEmpty()) {
+                throw new EntityNotFoundException(NOT_FOUND);
+            }
+            Donation donationCompatible = newList.get(0);
+
             donationCompatible.setReceiver(receiver);
             donationCompatible.setStatus(Status.ASSIGNED);
             receiver.setDonation(donationCompatible);
             donationCompatible.setAvailability(false);
-            donationRepository.save(donationCompatible);
-            return donationCompatible;
-    } catch (Exception e) {
-            System.out.println(NOT_FOUND);
-            return null;
+
+            getRepository().save(donationCompatible);
+            return getConverter().toDto(donationCompatible);
+
+        } catch (Exception e) {
+            throw new EntityNotFoundException(e.getMessage());
         }
     }
 
-    public Donation updateDonation(DonationUpdateRequest request) {
-        Employee employee = employeeService.findEmployeeById(request.getEmployeeId());
-        Donation donation = donationRepository.getById(request.getDonationId());
-        if (employee.getRole().equals(Role.BASE) || donation.getStatus().equals(Status.REFUSED)) {
+
+    @Override
+    public DonationDTO put(DonationRequestDTO dto,@Nonnull Long donationId) {
+        Employee employee = employeeService.findEmployeeById(dto.getEmployeeId());
+        if (employee.getRole().equals(Role.BASE) ) {
             throw new IllegalArgumentException(NOT_AUTHORIZED);
         } else {
-            donation.setStatus(Status.COMPLETED);
-            donation.setAvailability(true);
-            Donor donor = donation.getDonor();
-            donor.setNumberOfDonations(donor.getNumberOfDonations()+1);
-            donor.setBadge(donor.calculateBadge());
-            donorService.saveDonor(donor);
-            return donationRepository.save(donation);
+             DonationDTO donationDTO = super.put(dto, donationId);
+
+            if (dto.getDoctorId()!= null && donationDTO.getStatus().equalsIgnoreCase("completed")) {
+                Doctor doc= doctorService.findDoctorById(dto.getDoctorId());
+                donationCenterService.addDonation(doc.getDonationCenter());
+                if (donationDTO.getStatus().equalsIgnoreCase("completed")) {
+                   Donor donor= donorService.findDonor(donationDTO.getDonorId());
+                   donor.setBadge(donor.calculateBadge());
+
+                }
+
+            }
+            return donationDTO;
+
         }
     }
 
-    public void deleteDonation(long id) {
-        donationRepository.deleteById(id);
+
+
+
+    @Override
+    public List<DonationDTO> findAllByIdDoctor(long id) {
+        return getConverter().toDtoList(getRepository().findByDoctorId(id));
     }
 
-    public List<Donation> findAllByIdDoctor(long id) {
-        return donationRepository.findByDoctorId(id);
+    @Override
+    public List<DonationDTO> findAllByIdDonor(long id) {
+        return  getConverter().toDtoList(getRepository().findByDonorId(id));
     }
 
-    public List<Donation> findAllByIdDonor(long id) {
-        return donationRepository.findByDonorId(id);
-    }
-
-
-    public List<Donation> findAllByDate() {
-        List<Donation> donations = donationRepository.findAll();
+    @Override
+    public List<DonationDTO> findAllByDate() {
+        List<Donation> donations = getRepository().findAll();
         donations.sort(Comparator.comparing(Donation :: getDate));
-        return donations;
+        return getConverter().toDtoList(donations);
     }
 
 }
+
+
 
 
