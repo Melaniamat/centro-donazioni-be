@@ -4,6 +4,7 @@ import it.corsojava.progettodonazioni.DTO.request.DonorRequestDTO;
 import it.corsojava.progettodonazioni.DTO.response.DonorDTO;
 import it.corsojava.progettodonazioni.common.BaseConverter;
 import it.corsojava.progettodonazioni.common.BaseGenericRestService;
+import it.corsojava.progettodonazioni.common.BasePersonService;
 import it.corsojava.progettodonazioni.entities.Donor;
 import it.corsojava.progettodonazioni.repositories.DonorRepository;
 import it.corsojava.progettodonazioni.services.DonorService;
@@ -22,7 +23,7 @@ import static it.corsojava.progettodonazioni.costants.Costant.NOT_AUTHORIZED;
 import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
-public class DonorServiceImpl extends BaseGenericRestService<Donor, DonorDTO, DonorRequestDTO,DonorRepository> implements DonorService {
+public class DonorServiceImpl extends BasePersonService<Donor, DonorDTO, DonorRequestDTO,DonorRepository> implements DonorService {
 
     @Autowired
     DonorRepository donorRepository;

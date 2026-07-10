@@ -6,6 +6,7 @@ import it.corsojava.progettodonazioni.DTO.request.DoctorRequestDTO;
 import it.corsojava.progettodonazioni.DTO.response.DoctorDTO;
 import it.corsojava.progettodonazioni.common.BaseConverter;
 import it.corsojava.progettodonazioni.common.BaseGenericRestService;
+import it.corsojava.progettodonazioni.common.BasePersonService;
 import it.corsojava.progettodonazioni.entities.Doctor;
 import it.corsojava.progettodonazioni.repositories.DoctorRepository;
 import it.corsojava.progettodonazioni.repositories.DonationCenterRepository;
@@ -19,7 +20,7 @@ import java.util.List;
 import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
-public class DoctorServiceImpl  extends BaseGenericRestService<Doctor, DoctorDTO, DoctorRequestDTO,DoctorRepository> implements DoctorService {
+public class DoctorServiceImpl  extends BasePersonService<Doctor, DoctorDTO, DoctorRequestDTO,DoctorRepository> implements DoctorService {
 
  DonationCenterRepository donationCenterRepository;
 

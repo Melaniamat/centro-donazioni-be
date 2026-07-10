@@ -4,6 +4,7 @@ import it.corsojava.progettodonazioni.DTO.request.EmployeeRequestDTO;
 import it.corsojava.progettodonazioni.DTO.response.EmployeeDTO;
 import it.corsojava.progettodonazioni.common.BaseConverter;
 import it.corsojava.progettodonazioni.common.BaseGenericRestService;
+import it.corsojava.progettodonazioni.common.BasePersonService;
 import it.corsojava.progettodonazioni.entities.Employee;
 import it.corsojava.progettodonazioni.repositories.EmployeeRepository;
 import it.corsojava.progettodonazioni.services.EmployeeService;
@@ -18,7 +19,7 @@ import java.util.List;
 import static it.corsojava.progettodonazioni.costants.Costant.NOT_FOUND;
 
 @Service
-public class EmployeeServiceImpl extends BaseGenericRestService<Employee, EmployeeDTO, EmployeeRequestDTO,EmployeeRepository> implements EmployeeService {
+public class EmployeeServiceImpl extends BasePersonService<Employee, EmployeeDTO, EmployeeRequestDTO,EmployeeRepository> implements EmployeeService {
 
     @Autowired
     EmployeeRepository employeeRepository;
@@ -30,6 +31,7 @@ public class EmployeeServiceImpl extends BaseGenericRestService<Employee, Employ
     public Employee findEmployeeById(long id) {
         return RepositoryUtils.findOrThrow(getRepository(),id,getEntityClass());
     }
+
 
     @Override
     public List<EmployeeDTO> findEmployeesAlphabetical() {
