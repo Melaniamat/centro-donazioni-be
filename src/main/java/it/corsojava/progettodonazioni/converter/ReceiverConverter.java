@@ -47,7 +47,6 @@ public class ReceiverConverter extends BaseConverter<Receiver, ReceiverDTO, Rece
             Donation donation = RepositoryUtils.findOrThrow(donationRepository, request.getDonationId(), Donation.class);
             entity.setDonation(donation);
         }
-        entity.setCode(entity.calculateCode());
         return entity;
     }
 

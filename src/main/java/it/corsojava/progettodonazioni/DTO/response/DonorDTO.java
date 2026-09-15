@@ -16,7 +16,7 @@ public class DonorDTO extends PersonDTO {
     private LocalDate birthdate;
     private String address;
     private String location;
-    private String CAP;
+    private String cap;
     private LocalDate lastDonationDate;
     private boolean habilitated;
     private int numberOfDonations;

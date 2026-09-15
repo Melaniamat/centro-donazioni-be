@@ -35,6 +35,7 @@ public class DoctorConverter extends BaseConverter<Doctor, DoctorDTO, DoctorRequ
             dto.setDonationIds(entity.getDonations().stream().map(Donation::getId).toList());
         } else {
             dto.setDonationIds(new ArrayList<>());
+
         }
         return dto;
     }
@@ -48,7 +49,7 @@ public class DoctorConverter extends BaseConverter<Doctor, DoctorDTO, DoctorRequ
             DonationCenter center = RepositoryUtils.findOrThrow(donationCenterRepository, request.getDonationCenterId(), DonationCenter.class);
             entity.setDonationCenter(center);
         }
-        entity.setCode(entity.calculateCode());
+
         return entity;
     }
 

@@ -11,4 +11,5 @@ import java.util.List;
 public interface DonationCenterRepository extends BaseRepository<DonationCenter> {
     List<DonationCenter> findListByLocation(String location);
     List<DonationCenter> findListByRegion(String region);
+    boolean existsByPhoneNumber(String phoneNumber);
 }

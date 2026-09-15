@@ -5,6 +5,7 @@ import it.corsojava.progettodonazioni.DTO.request.DonorRequestDTO;
 import it.corsojava.progettodonazioni.DTO.response.DonorDTO;
 import it.corsojava.progettodonazioni.common.BaseConverter;
 import it.corsojava.progettodonazioni.entities.Donor;
+import it.corsojava.progettodonazioni.enumerator.Badge;
 import it.corsojava.progettodonazioni.enumerator.BloodType;
 import it.corsojava.progettodonazioni.enumerator.RH;
 import org.springframework.stereotype.Component;
@@ -57,8 +58,12 @@ public class DonorConverter extends BaseConverter<Donor, DonorDTO, DonorRequestD
         if (request.getRh() != null) {
             entity.setRh(RH.valueOf(request.getRh().toUpperCase()));
         }
-        entity.setCode(entity.calculateCode());
-        entity.setBadge(entity.calculateBadge());
+        if (entity.getSubscriptionDate() == null) {
+            entity.setSubscriptionDate(LocalDate.now());
+        }
+        entity.setBadge(Badge.ND);
+        entity.setAbilitated(true);
+        entity.setNumberOfDonations(0);
         return entity;
     }
 
@@ -73,16 +78,15 @@ public class DonorConverter extends BaseConverter<Donor, DonorDTO, DonorRequestD
         if (dto.getRh() != null) {
             entity.setRh(RH.valueOf( dto.getRh().toUpperCase().trim()));
         }
-        if (dto.getBirthdate() != null) {
-            entity.setBirthdate(LocalDate.parse(dto.getBirthdate().trim()));
+        if (dto.getBirthDate() != null) {
+            entity.setBirthdate(LocalDate.parse(dto.getBirthDate().trim()));
         }
         if (entity.getSubscriptionDate() == null) {
             entity.setSubscriptionDate(LocalDate.now());
-            entity.setAbilitated(true);
-            entity.setNumberOfDonations(0);
+            
         }
         if (entity.getSubscriptionDate() != null && entity.getBirthDate() != null) {
-            entity.calculateBadge();
+            entity.setBadge(entity.calculateBadge());
         }
         return entity;
     }

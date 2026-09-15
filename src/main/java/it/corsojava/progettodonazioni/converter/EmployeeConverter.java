@@ -34,7 +34,6 @@ public class EmployeeConverter extends BaseConverter<Employee, EmployeeDTO, Empl
         if (request.getRole() != null) {
             entity.setRole(Role.valueOf(request.getRole().toUpperCase()));
         }
-        entity.setCode(entity.calculateCode());
         return entity;
     }
 

@@ -43,7 +43,12 @@ public abstract class BaseGenericRestService<E extends BaseEntity, D extends Bas
         log.info("Save request");
         E entity = converter.requestToEntity(dto);
         entity.setId(null);
-        repository.save(entity);
+        entity = repository.saveAndFlush(entity);
+        if (entity instanceof Person personEntity) {
+            personEntity.setCode(personEntity.calculateCode());
+            entity= repository.save(entity);
+
+        }
         log.info(entity.getClass().getSimpleName() + " Saved successfully");
         return converter.toDto(entity);
     }

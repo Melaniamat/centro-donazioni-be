@@ -33,7 +33,7 @@ public class DonorServiceImpl extends BasePersonService<Donor, DonorDTO, DonorRe
     }
     @Override
     public DonorDTO post(DonorRequestDTO dto) {
-        int age = Period.between(LocalDate.parse(dto.getBirthdate()), LocalDate.now()).getYears();
+        int age = Period.between(LocalDate.parse(dto.getBirthDate()), LocalDate.now()).getYears();
         double weight = dto.getWeight();
         if (age >= 18 && age <= 60 && weight > 50) {
             return super.post(dto);

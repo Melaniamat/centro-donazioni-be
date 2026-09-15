@@ -1,5 +1,6 @@
 package it.corsojava.progettodonazioni.common;
 
+import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,7 +48,7 @@ public class BaseGenericRestController< D extends BaseDTO, REQ extends BaseReque
      * @return DTO of requested entity
      */
     @GetMapping(path = "/{id}")
-    public ResponseEntity<D> getById(@PathVariable final Long id) {
+    public ResponseEntity<D> getById(@Valid @PathVariable final Long id) {
         return new ResponseEntity<>(this.service.get(id), HttpStatus.OK);
     }
 
@@ -58,7 +59,7 @@ public class BaseGenericRestController< D extends BaseDTO, REQ extends BaseReque
      * @return DTO of the saved entity
      */
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<D> save(@RequestBody final REQ dto) {
+    public ResponseEntity<D> save(@Valid @RequestBody final REQ dto) {
         return new ResponseEntity<>(this.service.post(dto), HttpStatus.OK);
     }
 
@@ -72,7 +73,7 @@ public class BaseGenericRestController< D extends BaseDTO, REQ extends BaseReque
     @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<D> update(@PathVariable final Long id,
-                                   @Validated @RequestBody final REQ dto) {
+                                   @Valid @RequestBody final REQ dto) {
         //dto.setId(id);
         return new ResponseEntity<D>(service.put(dto,id), HttpStatus.OK);
     }

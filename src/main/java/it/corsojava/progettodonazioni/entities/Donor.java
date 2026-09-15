@@ -41,8 +41,8 @@ public class Donor extends Person {
     @Column(nullable = false)
     private String location;
 
-    @Column(name = "CAP", nullable = false)
-    private String CAP;
+    @Column(nullable = false)
+    private String cap;
 
     @Column
     private LocalDate lastDonationDate;
@@ -72,7 +72,7 @@ public class Donor extends Person {
 
     public Donor(BloodType bloodType, String name, String surname, String email, String username, String password,
                  String sex, LocalDate birthdate, LocalDate lastDonationDate, boolean abilitated, int numberOfDonations,
-                 double weight, RH rh, String address, String location,String CAP) {
+                 double weight, RH rh, String address, String location,String cap) {
         super(name, surname, email, username, password);
         this.bloodType = bloodType;
         this.sex = sex;
@@ -83,10 +83,8 @@ public class Donor extends Person {
         this.weight = weight;
         this.rh=rh;
         this.address=address;
-        this.CAP=CAP;
+        this.cap=cap;
         this.location=location;
-
-
     }
 
 

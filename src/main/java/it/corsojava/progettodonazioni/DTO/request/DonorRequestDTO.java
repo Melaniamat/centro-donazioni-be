@@ -25,7 +25,7 @@ public class DonorRequestDTO extends PersonRequestDTO {
 
     @NotBlank(message = MANDATORY_FIELD)
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = INVALID_DATE_FORMAT)
-    private String birthdate;
+    private String birthDate;
 
     private String address;
 
@@ -33,7 +33,7 @@ public class DonorRequestDTO extends PersonRequestDTO {
     private String location;
 
     @NotBlank(message = MANDATORY_FIELD)
-    private String CAP;
+    private String cap;
 
     @NotNull(message = MANDATORY_FIELD)
     private Double weight;

@@ -1,7 +1,9 @@
 package it.corsojava.progettodonazioni.services.impl;
 
 import it.corsojava.progettodonazioni.DTO.request.DonationCenterRequestDTO;
+import it.corsojava.progettodonazioni.DTO.request.DonorRequestDTO;
 import it.corsojava.progettodonazioni.DTO.response.DonationCenterDTO;
+import it.corsojava.progettodonazioni.DTO.response.DonorDTO;
 import it.corsojava.progettodonazioni.common.BaseConverter;
 import it.corsojava.progettodonazioni.common.BaseGenericRestService;
 import it.corsojava.progettodonazioni.entities.DonationCenter;
@@ -20,6 +22,12 @@ public class DonationCenterServiceImpl extends BaseGenericRestService<DonationCe
 
     protected DonationCenterServiceImpl(DonationCenterRepository repository, BaseConverter<DonationCenter, DonationCenterDTO, DonationCenterRequestDTO> converter) {
         super(repository, converter, DonationCenter.class);
+    }
+
+    @Override
+    public DonationCenterDTO post(DonationCenterRequestDTO dto) {
+        RepositoryUtils.throwIfExists(getRepository().existsByPhoneNumber(dto.getPhoneNumber()));
+        return super.post(dto);
     }
 
     @Override
